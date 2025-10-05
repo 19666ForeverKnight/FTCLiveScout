@@ -86,3 +86,42 @@ export async function isAuthenticated(): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Update the user's name
+ */
+export async function updateName(name: string): Promise<Models.User<Models.Preferences>> {
+  try {
+    const user = await account.updateName(name);
+    return user;
+  } catch (error) {
+    console.error('Update name error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Update the user's email
+ */
+export async function updateEmail(email: string, password: string): Promise<Models.User<Models.Preferences>> {
+  try {
+    const user = await account.updateEmail(email, password);
+    return user;
+  } catch (error) {
+    console.error('Update email error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Update the user's password
+ */
+export async function updatePassword(newPassword: string, oldPassword: string): Promise<Models.User<Models.Preferences>> {
+  try {
+    const user = await account.updatePassword(newPassword, oldPassword);
+    return user;
+  } catch (error) {
+    console.error('Update password error:', error);
+    throw error;
+  }
+}
