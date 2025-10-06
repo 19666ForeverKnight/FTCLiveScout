@@ -6,16 +6,18 @@ import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { Navigation } from '@/components/Navigation';
 import { EditEventModal } from '@/components/EditEventModal';
+import ShareEventModal from '@/components/ShareEventModal';
 import { getMatchScouts, getPitScouts, getRecentActivity, RecentActivity } from '@/lib/scouts';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
-  const { currentEvent } = useEvent();
+  const { currentEvent, refreshEvents } = useEvent();
   const router = useRouter();
   const [stats, setStats] = useState({ matches: 0, pits: 0, teams: 0 });
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [loadingData, setLoadingData] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -133,6 +135,17 @@ export default function DashboardPage() {
                     </p>
                   )}
                 </div>
+                {currentEvent?.userId === user?.$id && (
+                  <button
+                    onClick={() => setIsShareModalOpen(true)}
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors ml-2"
+                    title="Share Event"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                  </button>
+                )}
                 <button
                   onClick={() => setIsEditModalOpen(true)}
                   className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ml-2"
@@ -164,16 +177,30 @@ export default function DashboardPage() {
                   </p>
                 )}
               </div>
-              <button
-                onClick={() => setIsEditModalOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all"
-                title="Edit Event"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                Edit
-              </button>
+              <div className="flex items-center gap-3">
+                {currentEvent?.userId === user?.$id && (
+                  <button
+                    onClick={() => setIsShareModalOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 hover:border-blue-300 dark:hover:border-blue-700 transition-all"
+                    title="Share Event"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    Share
+                  </button>
+                )}
+                <button
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all"
+                  title="Edit Event"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Edit
+                </button>
+              </div>
             </div>
 
             {/* Mobile spacing for fixed header */}
@@ -375,6 +402,16 @@ export default function DashboardPage() {
             startDate: currentEvent.startDate,
             endDate: currentEvent.endDate,
           }}
+        />
+      )}
+
+      {/* Share Event Modal */}
+      {currentEvent && (
+        <ShareEventModal
+          event={currentEvent}
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+          onUpdate={refreshEvents}
         />
       )}
     </div>

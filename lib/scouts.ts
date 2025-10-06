@@ -15,6 +15,11 @@ export interface MatchScout {
   teamNumber: string;
   matchNumber: string;
   alliance: 'red' | 'blue';
+  createdBy?: string; // User ID who created this scout
+  createdByName?: string; // Name of user who created
+  lastEditedBy?: string; // User ID who last edited
+  lastEditedByName?: string; // Name of user who last edited
+  lastEditedAt?: string; // Timestamp of last edit
   randomization?: 'GPP' | 'PGP' | 'PPG';
   // Legacy fields (kept for backward compatibility)
   autoScore?: number;
@@ -50,6 +55,11 @@ export interface PitScout {
   teamNumber: string;
   teamName: string;
   pitNumber?: string;
+  createdBy?: string; // User ID who created this scout
+  createdByName?: string; // Name of user who created
+  lastEditedBy?: string; // User ID who last edited
+  lastEditedByName?: string; // Name of user who last edited
+  lastEditedAt?: string; // Timestamp of last edit
   drivetrainType: string;
   programmingLanguage: string;
   robotWeight: number;
@@ -110,13 +120,21 @@ export interface CreatePitScoutData {
 /**
  * Create a new match scout report
  */
-export const createMatchScout = async (data: CreateMatchScoutData): Promise<MatchScout> => {
+export const createMatchScout = async (
+  data: CreateMatchScoutData, 
+  createdByUserId: string, 
+  createdByUserName: string
+): Promise<MatchScout> => {
   try {
     const scout = await databases.createDocument(
       DATABASE_ID,
       MATCH_SCOUTS_COLLECTION_ID,
       ID.unique(),
-      data
+      {
+        ...data,
+        createdBy: createdByUserId,
+        createdByName: createdByUserName,
+      }
     );
     return scout as unknown as MatchScout;
   } catch (error) {
@@ -148,13 +166,21 @@ export const getMatchScouts = async (eventId: string): Promise<MatchScout[]> => 
 /**
  * Create a new pit scout report
  */
-export const createPitScout = async (data: CreatePitScoutData): Promise<PitScout> => {
+export const createPitScout = async (
+  data: CreatePitScoutData, 
+  createdByUserId: string, 
+  createdByUserName: string
+): Promise<PitScout> => {
   try {
     const scout = await databases.createDocument(
       DATABASE_ID,
       PIT_SCOUTS_COLLECTION_ID,
       ID.unique(),
-      data
+      {
+        ...data,
+        createdBy: createdByUserId,
+        createdByName: createdByUserName,
+      }
     );
     return scout as unknown as PitScout;
   } catch (error) {
@@ -212,15 +238,70 @@ export const getPitScout = async (pitScoutId: string): Promise<PitScout> => {
 };
 
 /**
+ * Get a single match scout by ID
+ */
+export const getMatchScout = async (matchScoutId: string): Promise<MatchScout> => {
+  try {
+    const scout = await databases.getDocument(
+      DATABASE_ID,
+      MATCH_SCOUTS_COLLECTION_ID,
+      matchScoutId
+    );
+    return scout as unknown as MatchScout;
+  } catch (error) {
+    console.error('Error getting match scout:', error);
+    throw error;
+  }
+};
+
+/**
+ * Update an existing match scout
+ */
+export const updateMatchScout = async (
+  matchScoutId: string,
+  data: Partial<CreateMatchScoutData>,
+  editedByUserId: string,
+  editedByUserName: string
+): Promise<MatchScout> => {
+  try {
+    const scout = await databases.updateDocument(
+      DATABASE_ID,
+      MATCH_SCOUTS_COLLECTION_ID,
+      matchScoutId,
+      {
+        ...data,
+        lastEditedBy: editedByUserId,
+        lastEditedByName: editedByUserName,
+        lastEditedAt: new Date().toISOString(),
+      }
+    );
+    return scout as unknown as MatchScout;
+  } catch (error) {
+    console.error('Error updating match scout:', error);
+    throw error;
+  }
+};
+
+/**
  * Update an existing pit scout
  */
-export const updatePitScout = async (pitScoutId: string, data: Partial<CreatePitScoutData>): Promise<PitScout> => {
+export const updatePitScout = async (
+  pitScoutId: string, 
+  data: Partial<CreatePitScoutData>,
+  editedByUserId: string,
+  editedByUserName: string
+): Promise<PitScout> => {
   try {
     const scout = await databases.updateDocument(
       DATABASE_ID,
       PIT_SCOUTS_COLLECTION_ID,
       pitScoutId,
-      data
+      {
+        ...data,
+        lastEditedBy: editedByUserId,
+        lastEditedByName: editedByUserName,
+        lastEditedAt: new Date().toISOString(),
+      }
     );
     return scout as unknown as PitScout;
   } catch (error) {

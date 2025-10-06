@@ -168,8 +168,23 @@ export default function ProfilePage() {
               <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
                 User ID
               </label>
-              <p className="text-sm font-mono bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded">
-                {user.$id}
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-mono bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded flex-1">
+                  {user.$id}
+                </p>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(user.$id);
+                    showMessage('User ID copied to clipboard!');
+                  }}
+                  className="px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 rounded-md text-sm font-medium transition-colors"
+                  title="Copy User ID"
+                >
+                  Copy
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                Share this ID with others to collaborate on events
               </p>
             </div>
 

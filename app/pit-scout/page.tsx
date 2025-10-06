@@ -299,10 +299,10 @@ function PitScoutForm() {
 
       if (editId) {
         // Update existing pit scout
-        await updatePitScout(editId, scoutData);
+        await updatePitScout(editId, scoutData, user.$id, user.name || user.email);
       } else {
         // Create new pit scout
-        await createPitScout(scoutData);
+        await createPitScout(scoutData, user.$id, user.name || user.email);
       }
 
       setSuccess(true);

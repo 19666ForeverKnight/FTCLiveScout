@@ -15,6 +15,8 @@ export interface Event {
   endDate: string;
   userId: string;
   isActive: boolean;
+  sharedWith?: string[]; // Array of user IDs who have access
+  sharedWithNames?: string[]; // Array of user names for display
 }
 
 export interface CreateEventData {
@@ -47,11 +49,12 @@ export const createEvent = async (data: CreateEventData): Promise<Event> => {
 };
 
 /**
- * Get all events for a user
+ * Get all events for a user (owned by user OR shared with user)
  */
 export const getEvents = async (userId: string): Promise<Event[]> => {
   try {
-    const response = await databases.listDocuments(
+    // Get events owned by user
+    const ownedResponse = await databases.listDocuments(
       DATABASE_ID,
       EVENTS_COLLECTION_ID,
       [
@@ -59,7 +62,43 @@ export const getEvents = async (userId: string): Promise<Event[]> => {
         Query.orderDesc('$createdAt'),
       ]
     );
-    return response.documents as Event[];
+    
+    let sharedEvents: any[] = [];
+    
+    // Try to get events shared with user (may fail if attribute doesn't exist yet)
+    try {
+      const sharedResponse = await databases.listDocuments(
+        DATABASE_ID,
+        EVENTS_COLLECTION_ID,
+        [
+          Query.contains('sharedWith', userId),
+          Query.orderDesc('$createdAt'),
+        ]
+      );
+      sharedEvents = sharedResponse.documents;
+    } catch (sharedError: any) {
+      // If sharedWith attribute doesn't exist in database yet, that's okay
+      // Just log it and continue with owned events only
+      if (sharedError.code === 400 && sharedError.message?.includes('Attribute not found')) {
+        console.log('Note: sharedWith attribute not yet added to database. Showing owned events only.');
+      } else {
+        // Re-throw if it's a different error
+        throw sharedError;
+      }
+    }
+    
+    // Combine and deduplicate events
+    const allEvents = [...ownedResponse.documents, ...sharedEvents];
+    const uniqueEvents = Array.from(
+      new Map(allEvents.map(event => [event.$id, event])).values()
+    );
+    
+    // Sort by creation date
+    uniqueEvents.sort((a, b) => 
+      new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime()
+    );
+    
+    return uniqueEvents as Event[];
   } catch (error) {
     console.error('Error getting events:', error);
     throw error;
@@ -134,4 +173,102 @@ export const setCurrentEventId = (eventId: string | null): void => {
 export const getCurrentEventId = (): string | null => {
   if (typeof window === 'undefined') return null;
   return localStorage.getItem('currentEventId');
+};
+
+/**
+ * Share an event with another user by their user ID
+ * Note: In a production app, you'd want to look up users by email using a server-side API
+ * For now, we'll accept userId directly
+ */
+export const shareEvent = async (eventId: string, targetUserId: string, targetUserName: string): Promise<Event> => {
+  try {
+    // Get the current event to check existing shares
+    const event = await getEvent(eventId);
+    
+    // Initialize arrays if they don't exist
+    const sharedWith = event.sharedWith || [];
+    const sharedWithNames = event.sharedWithNames || [];
+    
+    // Check if already shared
+    if (sharedWith.includes(targetUserId)) {
+      throw new Error('Event is already shared with this user');
+    }
+    
+    // Add the new user
+    sharedWith.push(targetUserId);
+    sharedWithNames.push(targetUserName);
+    
+    // Update the event
+    try {
+      const updatedEvent = await databases.updateDocument(
+        DATABASE_ID,
+        EVENTS_COLLECTION_ID,
+        eventId,
+        {
+          sharedWith,
+          sharedWithNames,
+        }
+      );
+      
+      return updatedEvent as Event;
+    } catch (updateError: any) {
+      // Check if the error is due to missing attributes
+      if (updateError.code === 400 && updateError.message?.includes('Unknown attribute')) {
+        throw new Error('Event sharing is not yet enabled. Please add the "sharedWith" and "sharedWithNames" attributes to the events collection in your Appwrite database.');
+      }
+      throw updateError;
+    }
+  } catch (error: any) {
+    console.error('Error sharing event:', error);
+    throw error;
+  }
+};
+
+/**
+ * Remove a user's access to an event
+ */
+export const unshareEvent = async (eventId: string, targetUserId: string): Promise<Event> => {
+  try {
+    // Get the current event
+    const event = await getEvent(eventId);
+    
+    // Initialize arrays if they don't exist
+    const sharedWith = event.sharedWith || [];
+    const sharedWithNames = event.sharedWithNames || [];
+    
+    // Find the user's index
+    const userIndex = sharedWith.indexOf(targetUserId);
+    
+    if (userIndex === -1) {
+      throw new Error('User does not have access to this event');
+    }
+    
+    // Remove the user
+    sharedWith.splice(userIndex, 1);
+    sharedWithNames.splice(userIndex, 1);
+    
+    // Update the event
+    try {
+      const updatedEvent = await databases.updateDocument(
+        DATABASE_ID,
+        EVENTS_COLLECTION_ID,
+        eventId,
+        {
+          sharedWith,
+          sharedWithNames,
+        }
+      );
+      
+      return updatedEvent as Event;
+    } catch (updateError: any) {
+      // Check if the error is due to missing attributes
+      if (updateError.code === 400 && updateError.message?.includes('Unknown attribute')) {
+        throw new Error('Event sharing is not yet enabled. Please add the "sharedWith" and "sharedWithNames" attributes to the events collection in your Appwrite database.');
+      }
+      throw updateError;
+    }
+  } catch (error: any) {
+    console.error('Error unsharing event:', error);
+    throw error;
+  }
 };

@@ -5,13 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { CreateEventModal } from '@/components/CreateEventModal';
+import ShareEventModal from '@/components/ShareEventModal';
+import type { Event } from '@/lib/events';
 
 export default function EventsPage() {
   const { user, loading, logout } = useAuth();
-  const { events, currentEvent, setCurrentEvent } = useEvent();
+  const { events, currentEvent, setCurrentEvent, refreshEvents } = useEvent();
   const router = useRouter();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [shareEventModal, setShareEventModal] = useState<Event | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -154,10 +157,9 @@ export default function EventsPage() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
               {events.map((event) => (
-                <button
+                <div
                   key={event.$id}
-                  onClick={() => handleEventClick(event.$id)}
-                  className="group relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md hover:shadow-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-200 text-left overflow-hidden"
+                  className="group relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md hover:shadow-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-200 overflow-hidden"
                 >
                   {/* Active Badge */}
                   {currentEvent?.$id === event.$id && (
@@ -168,36 +170,78 @@ export default function EventsPage() {
                     </div>
                   )}
 
-                  {/* Event Icon */}
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-amber-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-4 group-hover:scale-110 transition-transform">
-                    📅
-                  </div>
+                  {/* Share Button - Only for event owner */}
+                  {event.userId === user?.$id && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShareEventModal(event);
+                      }}
+                      className="absolute top-4 right-20 p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                      title="Share event"
+                    >
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                      </svg>
+                    </button>
+                  )}
 
-                  {/* Event Info */}
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {event.name}
-                  </h3>
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    {event.location}
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    {new Date(event.startDate).toLocaleDateString()} - {new Date(event.endDate).toLocaleDateString()}
-                  </div>
+                  {/* Clickable area */}
+                  <button
+                    onClick={() => handleEventClick(event.$id)}
+                    className="w-full text-left"
+                  >
+                    {/* Event Icon */}
+                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-amber-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-4 group-hover:scale-110 transition-transform">
+                      📅
+                    </div>
 
-                  {/* Hover Arrow */}
-                  <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </div>
-                </button>
+                    {/* Event Info */}
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                      {event.name}
+                    </h3>
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      {event.location}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500 mb-3">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      {new Date(event.startDate).toLocaleDateString()} - {new Date(event.endDate).toLocaleDateString()}
+                    </div>
+
+                    {/* Collaborators Badge */}
+                    {event.sharedWith && event.sharedWith.length > 0 && (
+                      <div className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 mt-2">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span>Shared with {event.sharedWith.length} {event.sharedWith.length === 1 ? 'person' : 'people'}</span>
+                      </div>
+                    )}
+
+                    {/* Shared Event Indicator */}
+                    {event.userId !== user?.$id && (
+                      <div className="flex items-center gap-2 text-xs text-amber-600 dark:text-amber-400 mt-2">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        <span>Shared event</span>
+                      </div>
+                    )}
+
+                    {/* Hover Arrow */}
+                    <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </div>
+                  </button>
+                </div>
               ))}
               
               {/* Create New Event Card */}
@@ -230,6 +274,16 @@ export default function EventsPage() {
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
       />
+
+      {/* Share Event Modal */}
+      {shareEventModal && (
+        <ShareEventModal
+          event={shareEventModal}
+          isOpen={true}
+          onClose={() => setShareEventModal(null)}
+          onUpdate={refreshEvents}
+        />
+      )}
     </div>
   );
 }

@@ -206,12 +206,17 @@ export default function MatchScoutPage() {
       };
 
       if (editId) {
-        // Update existing match scout
+        // Update existing match scout - inline update with user tracking
         const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'ftclivescout_db';
-        await databases.updateDocument(DATABASE_ID, 'match_scouts', editId, scoutData);
+        await databases.updateDocument(DATABASE_ID, 'match_scouts', editId, {
+          ...scoutData,
+          lastEditedBy: user.$id,
+          lastEditedByName: user.name || user.email,
+          lastEditedAt: new Date().toISOString(),
+        });
       } else {
         // Create new match scout
-        await createMatchScout(scoutData);
+        await createMatchScout(scoutData, user.$id, user.name || user.email);
       }
 
       setSuccess(true);
