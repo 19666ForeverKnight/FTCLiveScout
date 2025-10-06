@@ -5,21 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { Navigation } from '@/components/Navigation';
-import { getMatchScouts } from '@/lib/scouts';
-
-interface MatchScout {
-  $id: string;
-  teamNumber: number;
-  matchNumber: number;
-  alliance: 'red' | 'blue';
-  autoScore: number;
-  teleopScore: number;
-  endgameScore: number;
-  fouls: number;
-  defense: number;
-  notes: string;
-  $createdAt: string;
-}
+import { getMatchScouts, MatchScout } from '@/lib/scouts';
 
 export default function MatchesPage() {
   const { user, loading } = useAuth();
@@ -181,12 +167,12 @@ export default function MatchesPage() {
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md ${
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-md ${
                         match.alliance === 'red' 
                           ? 'bg-gradient-to-br from-red-500 to-rose-600' 
                           : 'bg-gradient-to-br from-blue-500 to-indigo-600'
                       }`}>
-                        {match.teamNumber}
+                        {match.matchNumber}
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white">
@@ -194,40 +180,110 @@ export default function MatchesPage() {
                         </h3>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                           Match {match.matchNumber} • {match.alliance === 'red' ? 'Red' : 'Blue'} Alliance
+                          {match.randomization && (
+                            <span className="ml-2 px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded text-xs font-semibold">
+                              {match.randomization}
+                            </span>
+                          )}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {match.autoScore + match.teleopScore + match.endgameScore}
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">DECODE 2025-26</div>
+                      <div className="flex gap-2">
+                        {match.robotLeave && <span className="text-lg">🏃</span>}
+                        {match.robotBase === 'FULL' && <span className="text-lg">🏠</span>}
                       </div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Total Points</p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-3 mb-4">
-                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 text-center">
-                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Auto</p>
-                      <p className="text-lg font-bold text-gray-900 dark:text-white">{match.autoScore}</p>
-                    </div>
-                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 text-center">
-                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Teleop</p>
-                      <p className="text-lg font-bold text-gray-900 dark:text-white">{match.teleopScore}</p>
-                    </div>
-                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 text-center">
-                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Endgame</p>
-                      <p className="text-lg font-bold text-gray-900 dark:text-white">{match.endgameScore}</p>
+                  {/* AUTO Section */}
+                  <div className="mb-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
+                    <h4 className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-2 flex items-center gap-1">
+                      <span>🤖</span> AUTO Period
+                    </h4>
+                    <div className="grid grid-cols-3 gap-2 text-xs">
+                      <div className="text-center">
+                        <div className="text-gray-600 dark:text-gray-400">Overflow</div>
+                        <div className="font-bold text-gray-900 dark:text-white">{match.overflowArtifactsAuto || 0}</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-gray-600 dark:text-gray-400">Classified</div>
+                        <div className="font-bold text-gray-900 dark:text-white">{match.classifiedArtifactsAuto || 0}</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-gray-600 dark:text-gray-400">Leave</div>
+                        <div className="font-bold text-gray-900 dark:text-white">
+                          {match.robotLeave ? '✓' : '-'}
+                        </div>
+                      </div>
                     </div>
                   </div>
+
+                  {/* TELEOP Section */}
+                  <div className="mb-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3">
+                    <h4 className="text-xs font-semibold text-purple-700 dark:text-purple-300 mb-2 flex items-center gap-1">
+                      <span>🎮</span> TELEOP Period
+                    </h4>
+                    <div className="grid grid-cols-4 gap-2 text-xs">
+                      <div className="text-center">
+                        <div className="text-gray-600 dark:text-gray-400">Depot</div>
+                        <div className="font-bold text-gray-900 dark:text-white">{match.depotArtifacts || 0}</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-gray-600 dark:text-gray-400">Overflow</div>
+                        <div className="font-bold text-gray-900 dark:text-white">{match.overflowArtifactsTeleop || 0}</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-gray-600 dark:text-gray-400">Classified</div>
+                        <div className="font-bold text-gray-900 dark:text-white">{match.classifiedArtifactsTeleop || 0}</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-gray-600 dark:text-gray-400">Base</div>
+                        <div className="font-bold text-xs text-gray-900 dark:text-white">
+                          {match.robotBase === 'FULL' ? 'Full' : 
+                           match.robotBase === 'PARTIAL' ? 'Partial' : '-'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Score Summary */}
+                  {(match.totalScore !== undefined || match.autoScore !== undefined || match.teleopScore !== undefined) && (
+                    <div className="mb-3 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-950/20 dark:to-indigo-950/20 border-2 border-purple-200 dark:border-purple-800 rounded-lg p-3">
+                      <h4 className="text-xs font-semibold text-purple-700 dark:text-purple-300 mb-2 flex items-center gap-1">
+                        <span>📊</span> SCORES
+                      </h4>
+                      <div className="grid grid-cols-3 gap-2">
+                        <div className="text-center bg-white dark:bg-gray-900 rounded p-2">
+                          <div className="text-xs text-gray-600 dark:text-gray-400">Auto</div>
+                          <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                            {match.autoScore ?? 0}
+                          </div>
+                        </div>
+                        <div className="text-center bg-white dark:bg-gray-900 rounded p-2">
+                          <div className="text-xs text-gray-600 dark:text-gray-400">Teleop</div>
+                          <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                            {match.teleopScore ?? 0}
+                          </div>
+                        </div>
+                        <div className="text-center bg-gradient-to-br from-purple-500 to-indigo-600 dark:from-purple-600 dark:to-indigo-700 rounded p-2">
+                          <div className="text-xs text-white/80">Total</div>
+                          <div className="text-lg font-bold text-white">
+                            {match.totalScore ?? 0}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                     <div className="flex items-center gap-1">
                       <span>⚠️</span>
-                      <span>{match.fouls} Fouls</span>
+                      <span>{(match.minorFouls || 0) + (match.majorFouls || 0)} Fouls ({match.minorFouls || 0}m / {match.majorFouls || 0}M)</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <span>🛡️</span>
-                      <span>Defense: {match.defense}/5</span>
+                    <div className="flex-1 text-right text-xs">
+                      {new Date(match.$createdAt).toLocaleDateString()}
                     </div>
                   </div>
 

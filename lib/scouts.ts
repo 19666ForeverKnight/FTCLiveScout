@@ -15,12 +15,30 @@ export interface MatchScout {
   teamNumber: string;
   matchNumber: string;
   alliance: 'red' | 'blue';
-  autoScore: number;
-  teleopScore: number;
-  endgameScore: number;
-  fouls: number;
-  defense: number;
+  randomization?: 'GPP' | 'PGP' | 'PPG';
+  // Legacy fields (kept for backward compatibility)
+  autoScore?: number;
+  teleopScore?: number;
+  totalScore?: number;
+  endgameScore?: number;
+  fouls?: number;
+  defense?: number;
   notes: string;
+  // DECODE 2025-26 Season Fields
+  // AUTO Period
+  overflowArtifactsAuto?: number;
+  classifiedArtifactsAuto?: number;
+  gatesAuto?: string; // JSON string of gate statuses
+  robotLeave?: boolean;
+  // TELEOP Period
+  depotArtifacts?: number;
+  overflowArtifactsTeleop?: number;
+  classifiedArtifactsTeleop?: number;
+  gatesTeleop?: string; // JSON string of gate statuses
+  robotBase?: 'NONE' | 'PARTIAL' | 'FULL';
+  // Fouls
+  minorFouls?: number;
+  majorFouls?: number;
 }
 
 export interface PitScout {
@@ -45,12 +63,30 @@ export interface CreateMatchScoutData {
   teamNumber: string;
   matchNumber: string;
   alliance: 'red' | 'blue';
-  autoScore: number;
-  teleopScore: number;
-  endgameScore: number;
-  fouls: number;
-  defense: number;
+  randomization?: 'GPP' | 'PGP' | 'PPG';
   notes: string;
+  // Calculated Scores
+  autoScore?: number;
+  teleopScore?: number;
+  totalScore?: number;
+  endgameScore?: number;
+  fouls?: number;
+  defense?: number;
+  // DECODE 2025-26 Season Fields
+  // AUTO Period
+  overflowArtifactsAuto?: number;
+  classifiedArtifactsAuto?: number;
+  gatesAuto?: string;
+  robotLeave?: boolean;
+  // TELEOP Period
+  depotArtifacts?: number;
+  overflowArtifactsTeleop?: number;
+  classifiedArtifactsTeleop?: number;
+  gatesTeleop?: string;
+  robotBase?: 'NONE' | 'PARTIAL' | 'FULL';
+  // Fouls
+  minorFouls?: number;
+  majorFouls?: number;
 }
 
 export interface CreatePitScoutData {
