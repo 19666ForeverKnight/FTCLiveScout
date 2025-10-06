@@ -53,21 +53,18 @@ export interface PitScout {
   eventId: string;
   userId: string;
   teamNumber: string;
-  teamName: string;
+  teamName?: string;
+  drivetrainType?: string;
+  programmingLanguage?: string;
+  robotWeight?: number;
+  strengths?: string;
+  weaknesses?: string;
+  notes?: string;
+  imageId?: string;
   pitNumber?: string;
-  createdBy?: string; // User ID who created this scout
-  createdByName?: string; // Name of user who created
+  createdBy?: string; // User ID who created
   lastEditedBy?: string; // User ID who last edited
-  lastEditedByName?: string; // Name of user who last edited
-  lastEditedAt?: string; // Timestamp of last edit
-  drivetrainType: string;
-  programmingLanguage: string;
-  robotWeight: number;
-  strengths: string;
-  weaknesses: string;
-  notes: string;
-  imageId?: string; // Legacy single image support
-  imageIds?: string; // JSON array of image IDs
+  lastEditedAt?: string; // ISO date string
 }
 
 export interface CreateMatchScoutData {
@@ -179,7 +176,6 @@ export const createPitScout = async (
       {
         ...data,
         createdBy: createdByUserId,
-        createdByName: createdByUserName,
       }
     );
     return scout as unknown as PitScout;
@@ -286,7 +282,7 @@ export const updateMatchScout = async (
  * Update an existing pit scout
  */
 export const updatePitScout = async (
-  pitScoutId: string, 
+  scoutId: string, 
   data: Partial<CreatePitScoutData>,
   editedByUserId: string,
   editedByUserName: string
@@ -295,11 +291,10 @@ export const updatePitScout = async (
     const scout = await databases.updateDocument(
       DATABASE_ID,
       PIT_SCOUTS_COLLECTION_ID,
-      pitScoutId,
+      scoutId,
       {
         ...data,
         lastEditedBy: editedByUserId,
-        lastEditedByName: editedByUserName,
         lastEditedAt: new Date().toISOString(),
       }
     );
@@ -311,10 +306,28 @@ export const updatePitScout = async (
 };
 
 /**
- * Delete a pit scout
+ * Delete a pit scout and its associated image
  */
 export const deletePitScout = async (pitScoutId: string): Promise<void> => {
   try {
+    // First, get the pit scout to check if it has an image
+    const pitScout = await databases.getDocument(
+      DATABASE_ID,
+      PIT_SCOUTS_COLLECTION_ID,
+      pitScoutId
+    ) as unknown as PitScout;
+
+    // If there's an image, delete it from storage
+    if (pitScout.imageId) {
+      try {
+        await storage.deleteFile('pit_scout_images', pitScout.imageId);
+      } catch (storageError) {
+        // Log but don't fail if image deletion fails (image might already be deleted)
+        console.warn('Error deleting pit scout image:', storageError);
+      }
+    }
+
+    // Delete the pit scout document
     await databases.deleteDocument(
       DATABASE_ID,
       PIT_SCOUTS_COLLECTION_ID,
