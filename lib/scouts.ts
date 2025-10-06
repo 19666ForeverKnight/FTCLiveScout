@@ -1,4 +1,4 @@
-import { databases } from './appwrite';
+import { databases, storage } from './appwrite';
 import { ID, Query } from 'appwrite';
 
 // Database and Collection IDs
@@ -55,6 +55,7 @@ export interface PitScout {
   strengths: string;
   weaknesses: string;
   notes: string;
+  imageId?: string;
 }
 
 export interface CreateMatchScoutData {
@@ -100,6 +101,7 @@ export interface CreatePitScoutData {
   strengths: string;
   weaknesses: string;
   notes: string;
+  imageId?: string;
 }
 
 /**
@@ -174,6 +176,57 @@ export const getPitScouts = async (eventId: string): Promise<PitScout[]> => {
     return response.documents as unknown as PitScout[];
   } catch (error) {
     console.error('Error getting pit scouts:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get a single pit scout by ID
+ */
+export const getPitScout = async (pitScoutId: string): Promise<PitScout> => {
+  try {
+    const scout = await databases.getDocument(
+      DATABASE_ID,
+      PIT_SCOUTS_COLLECTION_ID,
+      pitScoutId
+    );
+    return scout as unknown as PitScout;
+  } catch (error) {
+    console.error('Error getting pit scout:', error);
+    throw error;
+  }
+};
+
+/**
+ * Update an existing pit scout
+ */
+export const updatePitScout = async (pitScoutId: string, data: Partial<CreatePitScoutData>): Promise<PitScout> => {
+  try {
+    const scout = await databases.updateDocument(
+      DATABASE_ID,
+      PIT_SCOUTS_COLLECTION_ID,
+      pitScoutId,
+      data
+    );
+    return scout as unknown as PitScout;
+  } catch (error) {
+    console.error('Error updating pit scout:', error);
+    throw error;
+  }
+};
+
+/**
+ * Delete a pit scout
+ */
+export const deletePitScout = async (pitScoutId: string): Promise<void> => {
+  try {
+    await databases.deleteDocument(
+      DATABASE_ID,
+      PIT_SCOUTS_COLLECTION_ID,
+      pitScoutId
+    );
+  } catch (error) {
+    console.error('Error deleting pit scout:', error);
     throw error;
   }
 };

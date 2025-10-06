@@ -17,6 +17,7 @@ interface PitScout {
   strengths: string;
   weaknesses: string;
   notes: string;
+  imageId?: string;
   $createdAt: string;
 }
 
@@ -175,8 +176,8 @@ export default function PitsPage() {
               {filteredPits.map((pit) => (
                 <div
                   key={pit.$id}
-                  className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5 hover:shadow-lg transition-all duration-200 group cursor-pointer"
                   onClick={() => router.push(`/pit-scout?id=${pit.$id}`)}
+                  className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-800 p-6 hover:shadow-lg hover:border-purple-300 dark:hover:border-purple-700 transition-all duration-200 cursor-pointer"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
