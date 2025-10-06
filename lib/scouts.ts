@@ -49,13 +49,15 @@ export interface PitScout {
   userId: string;
   teamNumber: string;
   teamName: string;
+  pitNumber?: string;
   drivetrainType: string;
   programmingLanguage: string;
   robotWeight: number;
   strengths: string;
   weaknesses: string;
   notes: string;
-  imageId?: string;
+  imageId?: string; // Legacy single image support
+  imageIds?: string; // JSON array of image IDs
 }
 
 export interface CreateMatchScoutData {
@@ -95,6 +97,7 @@ export interface CreatePitScoutData {
   userId: string;
   teamNumber: string;
   teamName: string;
+  pitNumber?: string;
   drivetrainType: string;
   programmingLanguage: string;
   robotWeight: number;
@@ -185,14 +188,25 @@ export const getPitScouts = async (eventId: string): Promise<PitScout[]> => {
  */
 export const getPitScout = async (pitScoutId: string): Promise<PitScout> => {
   try {
+    console.log('getPitScout called with ID:', pitScoutId);
+    console.log('Database ID:', DATABASE_ID);
+    console.log('Collection ID:', PIT_SCOUTS_COLLECTION_ID);
+    
     const scout = await databases.getDocument(
       DATABASE_ID,
       PIT_SCOUTS_COLLECTION_ID,
       pitScoutId
     );
+    console.log('Retrieved scout:', scout);
     return scout as unknown as PitScout;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error getting pit scout:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      type: error.type,
+      response: error.response
+    });
     throw error;
   }
 };

@@ -11,13 +11,14 @@ interface PitScout {
   $id: string;
   teamNumber: string;
   teamName: string;
+  pitNumber?: string;
   drivetrainType: string;
   programmingLanguage: string;
   robotWeight: number;
   strengths: string;
   weaknesses: string;
   notes: string;
-  imageId?: string;
+  imageId?: string; // Comma-separated image IDs
   $createdAt: string;
 }
 
@@ -181,8 +182,15 @@ export default function PitsPage() {
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md">
-                        {pit.teamNumber}
+                      <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
+                        {pit.pitNumber ? (
+                          <div className="text-center">
+                            <div className="text-xs opacity-75">Pit</div>
+                            <div className="text-lg leading-none">{pit.pitNumber}</div>
+                          </div>
+                        ) : (
+                          <div className="text-lg">{pit.teamNumber}</div>
+                        )}
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white">
