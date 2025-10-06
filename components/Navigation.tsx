@@ -59,6 +59,17 @@ export function Navigation() {
                   <span className="text-xl mr-3">🔧</span>
                   Pits
                 </Link>
+                <Link
+                  href="/analytics"
+                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
+                    isActive('/analytics')
+                      ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 shadow-sm'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  <span className="text-xl mr-3">📊</span>
+                  Analytics
+                </Link>
               </>
             )}
           </nav>
@@ -108,6 +119,17 @@ export function Navigation() {
             >
               <span className="text-2xl mb-1">🔧</span>
               <span className="text-xs font-medium">Pits</span>
+            </Link>
+            <Link
+              href="/analytics"
+              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${
+                isActive('/analytics')
+                  ? 'text-purple-600 dark:text-purple-400'
+                  : 'text-gray-600 dark:text-gray-400'
+              }`}
+            >
+              <span className="text-2xl mb-1">📊</span>
+              <span className="text-xs font-medium">Analytics</span>
             </Link>
           </div>
         </nav>
