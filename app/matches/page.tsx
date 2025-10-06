@@ -170,7 +170,7 @@ export default function MatchesPage() {
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-md ${
                         match.alliance === 'red' 
                           ? 'bg-gradient-to-br from-red-500 to-rose-600' 
-                          : 'bg-gradient-to-br from-blue-500 to-indigo-600'
+                          : 'bg-gradient-to-br from-blue-500 to-amber-600'
                       }`}>
                         {match.matchNumber}
                       </div>
@@ -181,7 +181,7 @@ export default function MatchesPage() {
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                           Match {match.matchNumber} • {match.alliance === 'red' ? 'Red' : 'Blue'} Alliance
                           {match.randomization && (
-                            <span className="ml-2 px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded text-xs font-semibold">
+                            <span className="ml-2 px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded text-xs font-semibold">
                               {match.randomization}
                             </span>
                           )}
@@ -221,8 +221,8 @@ export default function MatchesPage() {
                   </div>
 
                   {/* TELEOP Section */}
-                  <div className="mb-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3">
-                    <h4 className="text-xs font-semibold text-purple-700 dark:text-purple-300 mb-2 flex items-center gap-1">
+                  <div className="mb-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
+                    <h4 className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-2 flex items-center gap-1">
                       <span>🎮</span> TELEOP Period
                     </h4>
                     <div className="grid grid-cols-4 gap-2 text-xs">
@@ -250,8 +250,8 @@ export default function MatchesPage() {
 
                   {/* Score Summary */}
                   {(match.totalScore !== undefined || match.autoScore !== undefined || match.teleopScore !== undefined) && (
-                    <div className="mb-3 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-950/20 dark:to-indigo-950/20 border-2 border-purple-200 dark:border-purple-800 rounded-lg p-3">
-                      <h4 className="text-xs font-semibold text-purple-700 dark:text-purple-300 mb-2 flex items-center gap-1">
+                    <div className="mb-3 bg-gradient-to-r from-blue-50 to-amber-50 dark:from-blue-950/20 dark:to-amber-950/20 border-2 border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                      <h4 className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-2 flex items-center gap-1">
                         <span>📊</span> SCORES
                       </h4>
                       <div className="grid grid-cols-3 gap-2">
@@ -267,7 +267,7 @@ export default function MatchesPage() {
                             {match.teleopScore ?? 0}
                           </div>
                         </div>
-                        <div className="text-center bg-gradient-to-br from-purple-500 to-indigo-600 dark:from-purple-600 dark:to-indigo-700 rounded p-2">
+                        <div className="text-center bg-gradient-to-br from-blue-500 to-amber-600 dark:from-blue-600 dark:to-amber-700 rounded p-2">
                           <div className="text-xs text-white/80">Total</div>
                           <div className="text-lg font-bold text-white">
                             {match.totalScore ?? 0}
@@ -304,7 +304,7 @@ export default function MatchesPage() {
       {/* Floating Add Button */}
       <button
         onClick={() => router.push('/match-scout')}
-        className="fixed bottom-24 lg:bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 z-50 group"
+        className="fixed bottom-24 lg:bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 z-50 group"
       >
         <svg className="w-6 h-6 group-hover:rotate-90 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

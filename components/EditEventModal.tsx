@@ -156,7 +156,7 @@ export function EditEventModal({ isOpen, onClose, eventId, initialData }: EditEv
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+              className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-amber-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-amber-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
             >
               {loading ? 'Saving...' : 'Save Changes'}
             </button>

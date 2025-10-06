@@ -132,7 +132,7 @@ export function CreateEventModal({ isOpen, onClose }: CreateEventModalProps) {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-amber-600 text-white rounded-lg hover:from-blue-700 hover:to-amber-700 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Creating...' : 'Create Event'}
             </button>

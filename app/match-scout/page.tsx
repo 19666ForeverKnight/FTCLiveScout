@@ -381,7 +381,7 @@ export default function MatchScoutPage() {
                       onClick={() => setFormData({ ...formData, alliance: 'blue' })}
                       className={`px-6 py-4 rounded-xl font-semibold text-white transition-all duration-200 ${
                         formData.alliance === 'blue'
-                          ? 'bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg scale-105 ring-4 ring-blue-500/30'
+                          ? 'bg-gradient-to-br from-blue-500 to-amber-600 shadow-lg scale-105 ring-4 ring-blue-500/30'
                           : 'bg-gray-300 dark:bg-gray-700 hover:bg-blue-400 dark:hover:bg-blue-600 opacity-60 hover:opacity-100'
                       }`}
                     >
@@ -400,8 +400,8 @@ export default function MatchScoutPage() {
                       onClick={() => setFormData({ ...formData, randomization: 'GPP' })}
                       className={`px-4 py-4 rounded-xl font-semibold transition-all duration-200 ${
                         formData.randomization === 'GPP'
-                          ? 'bg-gradient-to-br from-purple-500 to-violet-600 text-white shadow-lg scale-105 ring-4 ring-purple-500/30'
-                          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-purple-100 dark:hover:bg-purple-900 hover:text-purple-700 dark:hover:text-purple-300'
+                          ? 'bg-gradient-to-br from-blue-500 to-amber-600 text-white shadow-lg scale-105 ring-4 ring-blue-500/30'
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-700 dark:hover:text-blue-300'
                       }`}
                     >
                       <span className="text-2xl block mb-1">🟢 🟣 🟣</span>
@@ -413,8 +413,8 @@ export default function MatchScoutPage() {
                       onClick={() => setFormData({ ...formData, randomization: 'PGP' })}
                       className={`px-4 py-4 rounded-xl font-semibold transition-all duration-200 ${
                         formData.randomization === 'PGP'
-                          ? 'bg-gradient-to-br from-pink-500 to-rose-600 text-white shadow-lg scale-105 ring-4 ring-pink-500/30'
-                          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-pink-100 dark:hover:bg-pink-900 hover:text-pink-700 dark:hover:text-pink-300'
+                          ? 'bg-gradient-to-br from-amber-500 to-rose-600 text-white shadow-lg scale-105 ring-4 ring-amber-500/30'
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-amber-100 dark:hover:bg-amber-900 hover:text-amber-700 dark:hover:text-amber-300'
                       }`}
                     >
                       <span className="text-2xl block mb-1">🟣 🟢 🟣</span>
@@ -426,8 +426,8 @@ export default function MatchScoutPage() {
                       onClick={() => setFormData({ ...formData, randomization: 'PPG' })}
                       className={`px-4 py-4 rounded-xl font-semibold transition-all duration-200 ${
                         formData.randomization === 'PPG'
-                          ? 'bg-gradient-to-br from-indigo-500 to-blue-600 text-white shadow-lg scale-105 ring-4 ring-indigo-500/30'
-                          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-900 hover:text-indigo-700 dark:hover:text-indigo-300'
+                          ? 'bg-gradient-to-br from-amber-500 to-blue-600 text-white shadow-lg scale-105 ring-4 ring-amber-500/30'
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-amber-100 dark:hover:bg-amber-900 hover:text-amber-700 dark:hover:text-amber-300'
                       }`}
                     >
                       <span className="text-2xl block mb-1">🟣 🟣 🟢</span>
@@ -441,7 +441,7 @@ export default function MatchScoutPage() {
 
             {/* Total Score Display - Compact */}
             <div className="relative overflow-hidden rounded-xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 dark:from-purple-700 dark:via-indigo-700 dark:to-blue-700 rounded-xl"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-amber-600 to-blue-600 dark:from-blue-700 dark:via-amber-700 dark:to-blue-700 rounded-xl"></div>
               
               <div className="relative p-4 border-2 border-white/20 shadow-xl rounded-xl">
                 <div className="flex items-center justify-between gap-4">
@@ -577,8 +577,8 @@ export default function MatchScoutPage() {
                           onClick={() => setFormData({ ...formData, gatesAuto: { ...formData.gatesAuto, [gateNum]: 'PURPLE' }})}
                           className={`w-14 h-14 rounded-lg flex items-center justify-center font-bold text-xl transition-all ${
                             formData.gatesAuto[gateNum] === 'PURPLE'
-                              ? 'bg-purple-600 text-white shadow-lg scale-110'
-                              : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 hover:bg-purple-100 dark:hover:bg-purple-900'
+                              ? 'bg-blue-600 text-white shadow-lg scale-110'
+                              : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 hover:bg-blue-100 dark:hover:bg-blue-900'
                           }`}
                         >
                           P
@@ -754,8 +754,8 @@ export default function MatchScoutPage() {
                           onClick={() => setFormData({ ...formData, gatesTeleop: { ...formData.gatesTeleop, [gateNum]: 'PURPLE' }})}
                           className={`w-14 h-14 rounded-lg flex items-center justify-center font-bold text-xl transition-all ${
                             formData.gatesTeleop[gateNum] === 'PURPLE'
-                              ? 'bg-purple-600 text-white shadow-lg scale-110'
-                              : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 hover:bg-purple-100 dark:hover:bg-purple-900'
+                              ? 'bg-blue-600 text-white shadow-lg scale-110'
+                              : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 hover:bg-blue-100 dark:hover:bg-blue-900'
                           }`}
                         >
                           P
@@ -812,7 +812,7 @@ export default function MatchScoutPage() {
                     onClick={() => setFormData({ ...formData, robotBase: 'FULL' })}
                     className={`px-6 py-4 rounded-xl font-semibold transition-all duration-200 ${
                       formData.robotBase === 'FULL'
-                        ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg scale-105 ring-4 ring-blue-500/30'
+                        ? 'bg-gradient-to-br from-blue-500 to-amber-600 text-white shadow-lg scale-105 ring-4 ring-blue-500/30'
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-700 dark:hover:text-blue-300'
                     }`}
                   >

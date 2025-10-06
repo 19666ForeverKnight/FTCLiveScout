@@ -16,6 +16,7 @@ export default function DashboardPage() {
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [loadingData, setLoadingData] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     if (!loading && !user) {
@@ -25,6 +26,14 @@ export default function DashboardPage() {
       router.push('/events');
     }
   }, [user, loading, currentEvent, router]);
+
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Load event data
   useEffect(() => {
@@ -137,8 +146,8 @@ export default function DashboardPage() {
             </div>
 
             {/* Event Info Card - Desktop Only */}
-            <div className="hidden lg:flex items-center gap-6 p-6 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/30 dark:via-indigo-950/30 dark:to-purple-950/30 rounded-2xl border border-blue-100 dark:border-blue-900/30 shadow-sm">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-4xl shadow-lg">
+            <div className="hidden lg:flex items-center gap-6 p-6 bg-gradient-to-br from-blue-50 via-amber-50 to-blue-50 dark:from-blue-950/30 dark:via-amber-950/30 dark:to-blue-950/30 rounded-2xl border border-blue-100 dark:border-blue-900/30 shadow-sm">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-amber-600 rounded-2xl flex items-center justify-center text-white text-4xl shadow-lg">
                 📅
               </div>
               <div className="flex-1">
@@ -168,7 +177,52 @@ export default function DashboardPage() {
             </div>
 
             {/* Mobile spacing for fixed header */}
-            <div className="lg:hidden h-20"></div>
+            <div className="lg:hidden h-16"></div>
+
+            {/* Current Time Display */}
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-4 lg:p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+              {/* Mobile Layout - Compact */}
+              <div className="flex lg:hidden items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-amber-600 rounded-lg flex items-center justify-center text-xl shadow-md flex-shrink-0">
+                    🕐
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400">Current Time</p>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white font-mono">
+                      {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs font-medium text-gray-600 dark:text-gray-400">Date</p>
+                  <p className="text-xs font-semibold text-gray-900 dark:text-white whitespace-nowrap">
+                    {currentTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  </p>
+                </div>
+              </div>
+              
+              {/* Desktop Layout - Horizontal */}
+              <div className="hidden lg:flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-amber-600 rounded-xl flex items-center justify-center text-2xl shadow-md">
+                    🕐
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Current Time</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white font-mono">
+                      {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Date</p>
+                  <p className="text-base font-semibold text-gray-900 dark:text-white">
+                    {currentTime.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Quick Stats Cards */}
@@ -190,14 +244,14 @@ export default function DashboardPage() {
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  �
+                  🏁
                 </div>
               </div>
             </button>
 
             <button
               onClick={() => router.push('/pits')}
-              className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg hover:border-purple-300 dark:hover:border-purple-700 transition-all duration-200 text-left group"
+              className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-200 text-left group"
             >
               <div className="flex items-center justify-between">
                 <div>
@@ -207,11 +261,11 @@ export default function DashboardPage() {
                   <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
                     {loadingData ? '...' : stats.pits}
                   </p>
-                  <p className="text-xs text-purple-600 dark:text-purple-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     View all pits →
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-amber-100 dark:from-blue-900/20 dark:to-amber-900/20 rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                   🔧
                 </div>
               </div>
@@ -226,8 +280,11 @@ export default function DashboardPage() {
                   <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
                     {loadingData ? '...' : stats.teams}
                   </p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-2 opacity-0">
+                    Placeholder text
+                  </p>
                 </div>
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg flex items-center justify-center text-2xl">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-amber-100 dark:from-blue-900/20 dark:to-amber-900/20 rounded-lg flex items-center justify-center text-2xl">
                   🏆
                 </div>
               </div>
@@ -256,7 +313,7 @@ export default function DashboardPage() {
                   </p>
                   {currentEvent && (
                     <p className="text-sm text-gray-400 dark:text-gray-500">
-                      Click the <span className="text-blue-600 dark:text-blue-400 font-semibold">+</span> button to create your first scout report
+                      Go to <span className="text-green-600 dark:text-green-400 font-semibold">Matches</span> or <span className="text-blue-600 dark:text-blue-400 font-semibold">Pits</span> and click the <span className="text-blue-600 dark:text-blue-400 font-semibold">+</span> button to create your first scout report
                     </p>
                   )}
                 </div>

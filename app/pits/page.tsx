@@ -120,7 +120,7 @@ export default function PitsPage() {
             {/* Desktop Title */}
             <div className="hidden lg:block">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-amber-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg">
                   🔧
                 </div>
                 <div>
@@ -178,11 +178,11 @@ export default function PitsPage() {
                 <div
                   key={pit.$id}
                   onClick={() => router.push(`/pit-scout?id=${pit.$id}`)}
-                  className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-800 p-6 hover:shadow-lg hover:border-purple-300 dark:hover:border-purple-700 transition-all duration-200 cursor-pointer"
+                  className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-800 p-6 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-200 cursor-pointer"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
+                      <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-amber-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
                         {pit.pitNumber ? (
                           <div className="text-center">
                             <div className="text-xs opacity-75">Pit</div>
@@ -261,7 +261,7 @@ export default function PitsPage() {
       {/* Floating Add Button */}
       <button
         onClick={() => router.push('/pit-scout')}
-        className="fixed bottom-24 lg:bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 z-50 group"
+        className="fixed bottom-24 lg:bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 z-50 group"
       >
         <svg className="w-6 h-6 group-hover:rotate-90 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

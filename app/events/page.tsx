@@ -38,7 +38,7 @@ export default function EventsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-amber-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
         <div className="text-lg text-gray-600 dark:text-gray-400">Loading...</div>
       </div>
     );
@@ -49,19 +49,20 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-amber-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Header with Profile */}
-      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <header className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                F
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">FTC Live Scout</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Event Management</p>
+            <div className="flex items-center">
+              <div className="relative group">
+                <div className="absolute bg-gradient-to-r from-blue-600 to-amber-500 rounded-lg blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+                <img 
+                  src="/logo.png" 
+                  alt="FTC Live Scout" 
+                  className="relative h-12 w-auto sm:h-15 rounded-lg shadow-lg group-hover:scale-105 transition-transform duration-300" 
+                />
               </div>
             </div>
 
@@ -75,7 +76,7 @@ export default function EventsPage() {
                   <p className="text-sm font-semibold text-gray-900 dark:text-white">{user.name || 'User'}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold shadow-md">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 via-amber-600 to-blue-600 flex items-center justify-center text-white font-bold shadow-md">
                   {getUserInitial()}
                 </div>
               </button>
@@ -132,7 +133,7 @@ export default function EventsPage() {
         {/* Events Grid */}
         {events.length === 0 ? (
           <div className="text-center py-16">
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-amber-100 dark:from-blue-900/20 dark:to-amber-900/20 rounded-3xl flex items-center justify-center mx-auto mb-6">
               <svg className="w-12 h-12 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
@@ -141,7 +142,7 @@ export default function EventsPage() {
             <p className="text-gray-600 dark:text-gray-400 mb-6">Create your first event to start scouting</p>
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -168,7 +169,7 @@ export default function EventsPage() {
                   )}
 
                   {/* Event Icon */}
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-amber-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-4 group-hover:scale-110 transition-transform">
                     📅
                   </div>
 
@@ -198,18 +199,28 @@ export default function EventsPage() {
                   </div>
                 </button>
               ))}
-            </div>
+              
+              {/* Create New Event Card */}
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="group relative bg-gradient-to-br from-blue-50 to-amber-50 dark:from-blue-950/30 dark:to-amber-950/30 rounded-2xl p-6 shadow-md hover:shadow-2xl border-2 border-dashed border-blue-300 dark:border-blue-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-200 overflow-hidden flex flex-col items-center justify-center text-center min-h-[200px]"
+              >
+                {/* Plus Icon */}
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-amber-600 rounded-2xl flex items-center justify-center text-white mb-4 group-hover:scale-110 group-hover:rotate-90 transition-all duration-300 shadow-lg">
+                  <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                </div>
 
-            {/* Create New Event Button */}
-            <button
-              onClick={() => setIsCreateModalOpen(true)}
-              className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold rounded-2xl transition-all"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              Create New Event
-            </button>
+                {/* Card Info */}
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  Create New Event
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Add a new competition or tournament
+                </p>
+              </button>
+            </div>
           </>
         )}
       </main>

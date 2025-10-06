@@ -64,7 +64,7 @@ export function FloatingAddButton() {
         className={`fixed bottom-20 lg:bottom-8 right-4 lg:right-8 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 touch-manipulation ${
           isOpen
             ? 'bg-red-600 hover:bg-red-700 rotate-45'
-            : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
+            : 'bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700'
         }`}
         aria-label="Add scout report"
       >

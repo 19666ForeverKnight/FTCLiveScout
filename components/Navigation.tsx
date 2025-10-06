@@ -16,9 +16,9 @@ export function Navigation() {
       <aside className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col z-50">
         <div className="flex flex-col flex-grow bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 overflow-y-auto">
           {/* Logo */}
-          <div className="flex items-center flex-shrink-0 px-6 py-6 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center justify-center flex-shrink-0 px-6 py-5 border-b border-gray-200 dark:border-gray-800">
             <Link href="/events" className="flex items-center">
-              <span className="text-2xl font-bold text-blue-600">FTC Live Scout</span>
+              <img src="/logo.png" alt="FTC Live Scout" className="w-20 h-20 rounded-xl hover:scale-105 transition-transform duration-200 shadow-lg" />
             </Link>
           </div>
 
@@ -52,7 +52,7 @@ export function Navigation() {
                   href="/pits"
                   className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                     isActive('/pits')
-                      ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 shadow-sm'
+                      ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 shadow-sm'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
@@ -102,7 +102,7 @@ export function Navigation() {
               href="/pits"
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${
                 isActive('/pits')
-                  ? 'text-purple-600 dark:text-purple-400'
+                  ? 'text-blue-600 dark:text-blue-400'
                   : 'text-gray-600 dark:text-gray-400'
               }`}
             >
