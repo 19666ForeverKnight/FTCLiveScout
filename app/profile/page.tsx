@@ -6,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { updateName, updateEmail, updatePassword } from '@/lib/auth';
 
 export default function ProfilePage() {
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   
   const [isEditingName, setIsEditingName] = useState(false);
@@ -104,15 +104,6 @@ export default function ProfilePage() {
       showMessage(error?.message || 'Failed to update password. Check your old password.', true);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      router.push('/');
-    } catch (error) {
-      showMessage('Failed to logout', true);
     }
   };
 
@@ -368,28 +359,6 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Danger Zone */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-red-200 dark:border-red-900 p-6">
-            <h2 className="text-xl font-semibold text-red-700 dark:text-red-400 mb-4">
-              Danger Zone
-            </h2>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <h3 className="font-medium text-gray-900 dark:text-white mb-1">
-                  Sign Out
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Sign out of your account on this device
-                </p>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors touch-manipulation"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
         </div>
         </div>
       </main>

@@ -125,3 +125,20 @@ export async function updatePassword(newPassword: string, oldPassword: string): 
     throw error;
   }
 }
+
+/**
+ * Delete the current user's account
+ * Note: Appwrite client SDK doesn't support account deletion for security reasons.
+ * This function logs out the user from all devices as the closest equivalent.
+ */
+export async function deleteAccount(): Promise<void> {
+  try {
+    // Delete all sessions (logs out from all devices)
+    await account.deleteSessions();
+    // The user is now logged out from all devices
+    // Full account deletion would require server-side implementation
+  } catch (error) {
+    console.error('Delete account error:', error);
+    throw error;
+  }
+}

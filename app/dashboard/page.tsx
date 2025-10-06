@@ -180,7 +180,7 @@ export default function DashboardPage() {
             <div className="lg:hidden h-16"></div>
 
             {/* Current Time Display */}
-            <div className="bg-white dark:bg-gray-900 rounded-2xl p-4 lg:p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-4 lg:p-6 border border-gray-200 dark:border-gray-800 shadow-sm mt-0 lg:mt-6">
               {/* Mobile Layout - Compact */}
               <div className="flex lg:hidden items-center justify-between">
                 <div className="flex items-center gap-3">
