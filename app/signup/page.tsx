@@ -27,7 +27,7 @@ export default function SignupPage() {
 
     try {
       await signup({ name, email, password });
-      router.push('/events');
+      router.push('/user-agreement');
     } catch (err: any) {
       if (err?.message?.includes('already exists')) {
         setError('An account with this email already exists.');
