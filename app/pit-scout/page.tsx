@@ -73,14 +73,14 @@ function PitScoutForm() {
           
           setFormData({
             teamNumber: pit.teamNumber,
-            teamName: pit.teamName,
+            teamName: pit.teamName || '',
             pitNumber: pit.pitNumber || '',
-            drivetrainType: pit.drivetrainType,
-            robotWeight: pit.robotWeight,
-            programmingLanguage: pit.programmingLanguage,
-            strengths: pit.strengths,
-            weaknesses: pit.weaknesses,
-            notes: pit.notes,
+            drivetrainType: pit.drivetrainType || '',
+            robotWeight: pit.robotWeight || 0,
+            programmingLanguage: pit.programmingLanguage || '',
+            strengths: pit.strengths || '',
+            weaknesses: pit.weaknesses || '',
+            notes: pit.notes || '',
           });
           
           // Load existing images

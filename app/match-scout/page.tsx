@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { Suspense, useEffect, useState, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
@@ -8,7 +8,7 @@ import { Navigation } from '@/components/Navigation';
 import { createMatchScout } from '@/lib/scouts';
 import { databases } from '@/lib/appwrite';
 
-export default function MatchScoutPage() {
+function MatchScoutForm() {
   const { user, loading } = useAuth();
   const { currentEvent } = useEvent();
   const router = useRouter();
@@ -931,5 +931,20 @@ export default function MatchScoutPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function MatchScoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <div className="text-center">
+          <div className="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    }>
+      <MatchScoutForm />
+    </Suspense>
   );
 }

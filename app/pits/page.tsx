@@ -5,22 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { Navigation } from '@/components/Navigation';
-import { getPitScouts } from '@/lib/scouts';
-
-interface PitScout {
-  $id: string;
-  teamNumber: string;
-  teamName: string;
-  pitNumber?: string;
-  drivetrainType: string;
-  programmingLanguage: string;
-  robotWeight: number;
-  strengths: string;
-  weaknesses: string;
-  notes: string;
-  imageId?: string; // Comma-separated image IDs
-  $createdAt: string;
-}
+import { getPitScouts, PitScout } from '@/lib/scouts';
 
 export default function PitsPage() {
   const { user, loading } = useAuth();
@@ -62,8 +47,8 @@ export default function PitsPage() {
     const query = searchQuery.toLowerCase();
     return (
       pit.teamNumber.toLowerCase().includes(query) ||
-      pit.teamName.toLowerCase().includes(query) ||
-      pit.drivetrainType.toLowerCase().includes(query)
+      (pit.teamName?.toLowerCase().includes(query) || false) ||
+      (pit.drivetrainType?.toLowerCase().includes(query) || false)
     );
   });
 

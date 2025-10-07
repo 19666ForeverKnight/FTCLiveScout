@@ -41,7 +41,7 @@ export const createEvent = async (data: CreateEventData): Promise<Event> => {
         isActive: false,
       }
     );
-    return event as Event;
+    return event as unknown as Event;
   } catch (error) {
     console.error('Error creating event:', error);
     throw error;
@@ -115,7 +115,7 @@ export const getEvent = async (eventId: string): Promise<Event> => {
       EVENTS_COLLECTION_ID,
       eventId
     );
-    return event as Event;
+    return event as unknown as Event;
   } catch (error) {
     console.error('Error getting event:', error);
     throw error;
@@ -133,7 +133,7 @@ export const updateEvent = async (eventId: string, data: Partial<CreateEventData
       eventId,
       data
     );
-    return event as Event;
+    return event as unknown as Event;
   } catch (error) {
     console.error('Error updating event:', error);
     throw error;
@@ -210,7 +210,7 @@ export const shareEvent = async (eventId: string, targetUserId: string, targetUs
         }
       );
       
-      return updatedEvent as Event;
+      return updatedEvent as unknown as Event;
     } catch (updateError: any) {
       // Check if the error is due to missing attributes
       if (updateError.code === 400 && updateError.message?.includes('Unknown attribute')) {
@@ -259,7 +259,7 @@ export const unshareEvent = async (eventId: string, targetUserId: string): Promi
         }
       );
       
-      return updatedEvent as Event;
+      return updatedEvent as unknown as Event;
     } catch (updateError: any) {
       // Check if the error is due to missing attributes
       if (updateError.code === 400 && updateError.message?.includes('Unknown attribute')) {
