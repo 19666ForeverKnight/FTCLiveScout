@@ -31,8 +31,9 @@ function PitScoutForm() {
     teamName: '',
     pitNumber: '',
     drivetrainType: '',
-    robotWeight: 0,
+    robotWeight: '',
     programmingLanguage: '',
+    robotStructure: '',
     strengths: '',
     weaknesses: '',
     notes: '',
@@ -76,8 +77,9 @@ function PitScoutForm() {
             teamName: pit.teamName || '',
             pitNumber: pit.pitNumber || '',
             drivetrainType: pit.drivetrainType || '',
-            robotWeight: pit.robotWeight || 0,
+            robotWeight: pit.robotWeight ? String(pit.robotWeight) : '',
             programmingLanguage: pit.programmingLanguage || '',
+            robotStructure: pit.robotStructure || '',
             strengths: pit.strengths || '',
             weaknesses: pit.weaknesses || '',
             notes: pit.notes || '',
@@ -283,7 +285,8 @@ function PitScoutForm() {
         pitNumber: formData.pitNumber,
         drivetrainType: formData.drivetrainType,
         programmingLanguage: formData.programmingLanguage,
-        robotWeight: formData.robotWeight,
+        robotWeight: formData.robotWeight ? parseFloat(formData.robotWeight) : 0,
+        robotStructure: formData.robotStructure,
         strengths: formData.strengths,
         weaknesses: formData.weaknesses,
         notes: formData.notes,
@@ -510,12 +513,19 @@ function PitScoutForm() {
                     Weight (lbs)
                   </label>
                   <input
-                    type="number"
+                    type="text"
                     id="robotWeight"
+                    inputMode="decimal"
                     className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600"
-                    placeholder="e.g., 40"
+                    placeholder="e.g., 40.5"
                     value={formData.robotWeight}
-                    onChange={(e) => setFormData({ ...formData, robotWeight: parseInt(e.target.value) || 0 })}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Allow empty, numbers, and decimal point
+                      if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                        setFormData({ ...formData, robotWeight: value });
+                      }
+                    }}
                   />
                 </div>
 
@@ -535,6 +545,20 @@ function PitScoutForm() {
                     <option value="onbot">OnBot Java</option>
                     <option value="other">Other</option>
                   </select>
+                </div>
+
+                <div className="md:col-span-2 group">
+                  <label htmlFor="robotStructure" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    🏗️ Robot Structure Description
+                  </label>
+                  <textarea
+                    id="robotStructure"
+                    rows={4}
+                    className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600 resize-none"
+                    placeholder="Describe the robot's structure, design, mechanisms, subsystems, etc..."
+                    value={formData.robotStructure}
+                    onChange={(e) => setFormData({ ...formData, robotStructure: e.target.value })}
+                  />
                 </div>
               </div>
             </div>

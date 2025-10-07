@@ -4,7 +4,7 @@ import { ID, Query } from 'appwrite';
 // Database and Collection IDs
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'ftclivescout_db';
 const MATCH_SCOUTS_COLLECTION_ID = 'match_scouts';
-const PIT_SCOUTS_COLLECTION_ID = 'pit_scouts';
+const PIT_SCOUTS_COLLECTION_ID = 'pit_records';
 
 export interface MatchScout {
   $id: string;
@@ -57,6 +57,7 @@ export interface PitScout {
   drivetrainType?: string;
   programmingLanguage?: string;
   robotWeight?: number;
+  robotStructure?: string; // Description of robot structure/design
   strengths?: string;
   weaknesses?: string;
   notes?: string;
@@ -108,6 +109,7 @@ export interface CreatePitScoutData {
   drivetrainType: string;
   programmingLanguage: string;
   robotWeight: number;
+  robotStructure?: string;
   strengths: string;
   weaknesses: string;
   notes: string;
