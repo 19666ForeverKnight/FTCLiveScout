@@ -32,7 +32,7 @@ export function EditEventModal({ isOpen, onClose, eventId, initialData }: EditEv
       setEndDate(initialData.endDate);
       setError('');
     }
-  }, [isOpen, initialData]);
+  }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
