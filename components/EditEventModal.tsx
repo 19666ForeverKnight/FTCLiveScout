@@ -36,7 +36,7 @@ export function EditEventModal({ isOpen, onClose, eventId, initialData }: EditEv
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!name.trim() || !location.trim() || !startDate || !endDate) {
       setError('Please fill in all fields');
       return;
