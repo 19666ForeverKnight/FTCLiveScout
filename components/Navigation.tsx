@@ -12,7 +12,7 @@ export function Navigation() {
   const { user } = useAuth();
 
   const isActive = (path: string) => pathname === path;
-  
+
   // Check if user can see checklists (not viewer or scouter)
   const canSeeChecklists = currentEvent && user && (() => {
     const role = getUserRole(currentEvent, user.$id);
@@ -37,44 +37,40 @@ export function Navigation() {
               <>
                 <Link
                   href="/dashboard"
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
-                    isActive('/dashboard')
+                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${isActive('/dashboard')
                       ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 shadow-sm'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
+                    }`}
                 >
                   <span className="text-xl mr-3">🏠</span>
                   Dashboard
                 </Link>
                 <Link
                   href="/matches"
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
-                    isActive('/matches')
+                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${isActive('/matches')
                       ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 shadow-sm'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
+                    }`}
                 >
                   <span className="text-xl mr-3">🏁</span>
                   Matches
                 </Link>
                 <Link
                   href="/pits"
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
-                    isActive('/pits')
+                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${isActive('/pits')
                       ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 shadow-sm'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
+                    }`}
                 >
                   <span className="text-xl mr-3">🔧</span>
                   Pits
                 </Link>
                 <Link
                   href="/analytics"
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
-                    isActive('/analytics')
+                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${isActive('/analytics')
                       ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 shadow-sm'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
+                    }`}
                 >
                   <span className="text-xl mr-3">📊</span>
                   Analytics
@@ -82,11 +78,10 @@ export function Navigation() {
                 {canSeeChecklists && (
                   <Link
                     href="/checklists"
-                    className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
-                      isActive('/checklists')
+                    className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${isActive('/checklists')
                         ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 shadow-sm'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    }`}
+                      }`}
                   >
                     <span className="text-xl mr-3">✅</span>
                     Checklists
@@ -111,44 +106,40 @@ export function Navigation() {
           <div className="flex justify-around items-center h-16">
             <Link
               href="/dashboard"
-              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${
-                isActive('/dashboard')
+              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${isActive('/dashboard')
                   ? 'text-blue-600 dark:text-blue-400'
                   : 'text-gray-600 dark:text-gray-400'
-              }`}
+                }`}
             >
               <span className="text-2xl mb-1">🏠</span>
               <span className="text-xs font-medium">Home</span>
             </Link>
             <Link
               href="/matches"
-              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${
-                isActive('/matches')
+              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${isActive('/matches')
                   ? 'text-green-600 dark:text-green-400'
                   : 'text-gray-600 dark:text-gray-400'
-              }`}
+                }`}
             >
               <span className="text-2xl mb-1">🏁</span>
               <span className="text-xs font-medium">Matches</span>
             </Link>
             <Link
               href="/pits"
-              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${
-                isActive('/pits')
+              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${isActive('/pits')
                   ? 'text-blue-600 dark:text-blue-400'
                   : 'text-gray-600 dark:text-gray-400'
-              }`}
+                }`}
             >
               <span className="text-2xl mb-1">🔧</span>
               <span className="text-xs font-medium">Pits</span>
             </Link>
             <Link
               href="/analytics"
-              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${
-                isActive('/analytics')
+              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${isActive('/analytics')
                   ? 'text-purple-600 dark:text-purple-400'
                   : 'text-gray-600 dark:text-gray-400'
-              }`}
+                }`}
             >
               <span className="text-2xl mb-1">📊</span>
               <span className="text-xs font-medium">Analytics</span>
@@ -156,11 +147,10 @@ export function Navigation() {
             {canSeeChecklists && (
               <Link
                 href="/checklists"
-                className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${
-                  isActive('/checklists')
+                className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${isActive('/checklists')
                     ? 'text-orange-600 dark:text-orange-400'
                     : 'text-gray-600 dark:text-gray-400'
-                }`}
+                  }`}
               >
                 <span className="text-2xl mb-1">✅</span>
                 <span className="text-xs font-medium">Checklists</span>

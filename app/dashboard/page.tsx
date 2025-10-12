@@ -328,43 +328,43 @@ export default function DashboardPage() {
             const role = getUserRole(currentEvent, user.$id);
             return role && ['admin', 'driver', 'engineer', 'technician'].includes(role);
           })() && (
-            <button
-              onClick={() => router.push('/checklists')}
-              className="w-full bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-lg shadow-md p-6 border border-orange-200 dark:border-orange-800 hover:shadow-lg hover:border-orange-300 dark:hover:border-orange-700 transition-all duration-200 text-left group mb-8"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center text-2xl shadow-md group-hover:scale-110 transition-transform">
-                    ✅
+              <button
+                onClick={() => router.push('/checklists')}
+                className="w-full bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-lg shadow-md p-6 border border-orange-200 dark:border-orange-800 hover:shadow-lg hover:border-orange-300 dark:hover:border-orange-700 transition-all duration-200 text-left group mb-8"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center text-2xl shadow-md group-hover:scale-110 transition-transform">
+                      ✅
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                        {(() => {
+                          const role = getUserRole(currentEvent, user.$id);
+                          return role === 'admin' ? 'Event Checklists' : 'My Checklist';
+                        })()}
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {(() => {
+                          const role = getUserRole(currentEvent, user.$id);
+                          return role === 'admin'
+                            ? 'Manage all role checklists'
+                            : 'Manage your personal pre-match checklist';
+                        })()}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-                      {(() => {
-                        const role = getUserRole(currentEvent, user.$id);
-                        return role === 'admin' ? 'Event Checklists' : 'My Checklist';
-                      })()}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {(() => {
-                        const role = getUserRole(currentEvent, user.$id);
-                        return role === 'admin' 
-                          ? 'Manage all role checklists' 
-                          : 'Manage your personal pre-match checklist';
-                      })()}
-                    </p>
-                  </div>
+                  <svg
+                    className="w-6 h-6 text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 group-hover:translate-x-1 transition-all"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
-                <svg 
-                  className="w-6 h-6 text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 group-hover:translate-x-1 transition-all" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </button>
-          )}
+              </button>
+            )}
 
           {/* Recent Activity */}
           <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-800">
@@ -401,8 +401,8 @@ export default function DashboardPage() {
                     >
                       <div className="flex items-center gap-3">
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${activity.type === 'match'
-                            ? 'bg-blue-100 dark:bg-blue-900/20'
-                            : 'bg-green-100 dark:bg-green-900/20'
+                          ? 'bg-blue-100 dark:bg-blue-900/20'
+                          : 'bg-green-100 dark:bg-green-900/20'
                           }`}>
                           {activity.type === 'match' ? '🎯' : '🔧'}
                         </div>
@@ -422,8 +422,8 @@ export default function DashboardPage() {
                         </div>
                       </div>
                       <div className={`px-3 py-1 rounded-full text-xs font-medium ${activity.type === 'match'
-                          ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                          : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                        ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                        : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
                         }`}>
                         {activity.type === 'match' ? 'Match' : 'Pit'}
                       </div>
