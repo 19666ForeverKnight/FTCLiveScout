@@ -426,8 +426,8 @@ function ChecklistCard({
                         <div className="flex-1 min-w-0">
                             <p
                                 className={`text-sm ${item.completed
-                                        ? 'line-through text-gray-500 dark:text-gray-500'
-                                        : 'text-gray-900 dark:text-gray-100'
+                                    ? 'line-through text-gray-500 dark:text-gray-500'
+                                    : 'text-gray-900 dark:text-gray-100'
                                     }`}
                             >
                                 {item.text}
