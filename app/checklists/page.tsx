@@ -440,8 +440,9 @@ function ChecklistCard({
                         </div>
                         <button
                             onClick={() => onDeleteItem(checklist.$id, item.id, items)}
-                            className="opacity-0 group-hover:opacity-100 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-opacity"
+                            className="flex-shrink-0 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors lg:opacity-0 lg:group-hover:opacity-100 lg:transition-opacity"
                             title="Delete item"
+                            aria-label="Delete item"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
