@@ -23,13 +23,13 @@ export default function AboutPage() {
 
         {/* Main Content */}
         <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50 dark:border-gray-800/50 p-8 space-y-8">
-          
+
           {/* Mission Section */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Our Mission</h2>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-              FTC Live Scout is designed to revolutionize the way teams scout and analyze FIRST Tech Challenge competitions. 
-              Our mission is to provide an intuitive, powerful, and accessible platform that helps teams make data-driven 
+              FTC Live Scout is designed to revolutionize the way teams scout and analyze FIRST Tech Challenge competitions.
+              Our mission is to provide an intuitive, powerful, and accessible platform that helps teams make data-driven
               decisions and improve their competitive performance.
             </p>
           </section>
@@ -42,7 +42,7 @@ export default function AboutPage() {
                 <div className="text-3xl mb-3">🏁</div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Match Scouting</h3>
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  Collect real-time match data with our intuitive scouting interface. Track team performance, 
+                  Collect real-time match data with our intuitive scouting interface. Track team performance,
                   scores, and key metrics during competitions.
                 </p>
               </div>
@@ -51,7 +51,7 @@ export default function AboutPage() {
                 <div className="text-3xl mb-3">🔧</div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Pit Scouting</h3>
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  Document robot capabilities, team information, and strategic insights with comprehensive 
+                  Document robot capabilities, team information, and strategic insights with comprehensive
                   pit scouting tools.
                 </p>
               </div>
@@ -60,7 +60,7 @@ export default function AboutPage() {
                 <div className="text-3xl mb-3">📊</div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Analytics</h3>
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  Analyze team performance with advanced analytics and visualizations. Make informed 
+                  Analyze team performance with advanced analytics and visualizations. Make informed
                   alliance selections and strategic decisions.
                 </p>
               </div>
@@ -69,7 +69,7 @@ export default function AboutPage() {
                 <div className="text-3xl mb-3">🤝</div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Team Collaboration</h3>
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  Share events and data with your team members. Collaborate seamlessly during 
+                  Share events and data with your team members. Collaborate seamlessly during
                   competitions with real-time updates.
                 </p>
               </div>
@@ -80,7 +80,7 @@ export default function AboutPage() {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Built With Modern Technology</h2>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              FTC Live Scout is built using cutting-edge web technologies to ensure a fast, reliable, 
+              FTC Live Scout is built using cutting-edge web technologies to ensure a fast, reliable,
               and responsive experience across all devices:
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -116,13 +116,13 @@ export default function AboutPage() {
                     FTC Team 19666 - Forever Knight Robotics
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                    FTC Live Scout was created by Team 19666, Forever Knight Robotics. As an active FTC team, 
-                    we understand the challenges of scouting and data collection during competitions. We built 
-                    this platform to help teams like ours make better strategic decisions and improve their 
+                    FTC Live Scout was created by Team 19666, Forever Knight Robotics. As an active FTC team,
+                    we understand the challenges of scouting and data collection during competitions. We built
+                    this platform to help teams like ours make better strategic decisions and improve their
                     competitive performance.
                   </p>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                    Our mission is to give back to the FTC community by providing free, powerful tools that 
+                    Our mission is to give back to the FTC community by providing free, powerful tools that
                     level the playing field and help all teams succeed, regardless of their resources.
                   </p>
                 </div>
@@ -134,9 +134,9 @@ export default function AboutPage() {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">About FIRST Tech Challenge</h2>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-              FIRST Tech Challenge (FTC) is a robotics competition for students in grades 7-12. Teams design, build, 
-              program, and operate robots to compete in a head-to-head challenge in an alliance format. FTC combines 
-              the excitement of sport with the rigors of science and technology, inspiring young people to become 
+              FIRST Tech Challenge (FTC) is a robotics competition for students in grades 7-12. Teams design, build,
+              program, and operate robots to compete in a head-to-head challenge in an alliance format. FTC combines
+              the excitement of sport with the rigors of science and technology, inspiring young people to become
               science and technology leaders.
             </p>
           </section>
@@ -146,13 +146,13 @@ export default function AboutPage() {
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Support & Feedback</h2>
             <div className="bg-gradient-to-r from-blue-50 to-amber-50 dark:from-blue-900/20 dark:to-amber-900/20 p-6 rounded-2xl border border-gray-200 dark:border-gray-700">
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                We're constantly working to improve FTC Live Scout and welcome your feedback. If you encounter 
+                We're constantly working to improve FTC Live Scout and welcome your feedback. If you encounter
                 any issues, have suggestions for new features, or need assistance, please don't hesitate to reach out.
               </p>
               <div className="flex flex-wrap gap-4">
-                <a 
-                  href="https://github.com/19666ForeverKnight/FTCLiveScout" 
-                  target="_blank" 
+                <a
+                  href="https://github.com/19666ForeverKnight/FTCLiveScout"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
                 >

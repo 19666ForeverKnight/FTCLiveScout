@@ -63,7 +63,7 @@ export default function Home() {
               Elevate Your <span className="bg-gradient-to-r from-blue-600 to-amber-600 dark:from-blue-400 dark:to-amber-400 bg-clip-text text-transparent">FTC Scouting</span>
             </h1>
             <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
-              The ultimate live scouting platform for FIRST Tech Challenge teams. 
+              The ultimate live scouting platform for FIRST Tech Challenge teams.
               Collect data, analyze performance, and make winning alliance selections.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -171,9 +171,9 @@ export default function Home() {
           </div>
           <div className="max-w-4xl mx-auto">
             <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-2 shadow-2xl">
-              <img 
-                src="/ftc_decode_1240x860.png" 
-                alt="FTC DECODE Season 2024-2025" 
+              <img
+                src="/ftc_decode_1240x860.png"
+                alt="FTC DECODE Season 2024-2025"
                 className="w-full h-auto rounded-2xl shadow-xl"
               />
             </div>
@@ -272,7 +272,7 @@ export default function Home() {
               <Link href="/terms" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Terms</Link>
               <a href="https://github.com/19666ForeverKnight/FTCLiveScout" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">GitHub</a>
             </div>
-            
+
             {/* Team 19666 Credit */}
             <div className="flex flex-col items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-800 w-full max-w-md">
               <div className="flex items-center gap-3">
