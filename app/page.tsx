@@ -262,7 +262,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border-t border-gray-200 dark:border-gray-800 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex flex-col items-center gap-6">
             <div className="flex items-center gap-3">
               <img src="/logo.png" alt="FTC Live Scout" className="w-10 h-10 rounded-lg" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">FTC Live Scout</span>
@@ -272,6 +272,22 @@ export default function Home() {
               <Link href="/terms" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Terms</Link>
               <a href="https://github.com/19666ForeverKnight/FTCLiveScout" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">GitHub</a>
             </div>
+            
+            {/* Team 19666 Credit */}
+            <div className="flex flex-col items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-800 w-full max-w-md">
+              <div className="flex items-center gap-3">
+                <img src="/FTC 19666 Logo.svg" alt="FTC Team 19666" className="w-12 h-12" />
+                <div className="text-center">
+                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    Created by FTC Team 19666
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                    Forever Knight Robotics
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <p className="text-sm text-gray-500 dark:text-gray-400">
               © 2025 FTC Live Scout. Made with ❤️ for FTC
             </p>

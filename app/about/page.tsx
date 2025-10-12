@@ -103,6 +103,33 @@ export default function AboutPage() {
             </div>
           </section>
 
+          {/* Created By Section */}
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Created By</h2>
+            <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-amber-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-amber-900/20 p-8 rounded-2xl border border-gray-200 dark:border-gray-700">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="flex-shrink-0">
+                  <img src="/FTC 19666 Logo.svg" alt="FTC Team 19666" className="w-32 h-32 md:w-40 md:h-40" />
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    FTC Team 19666 - Forever Knight Robotics
+                  </h3>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                    FTC Live Scout was created by Team 19666, Forever Knight Robotics. As an active FTC team, 
+                    we understand the challenges of scouting and data collection during competitions. We built 
+                    this platform to help teams like ours make better strategic decisions and improve their 
+                    competitive performance.
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    Our mission is to give back to the FTC community by providing free, powerful tools that 
+                    level the playing field and help all teams succeed, regardless of their resources.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* About FTC Section */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">About FIRST Tech Challenge</h2>
@@ -142,9 +169,13 @@ export default function AboutPage() {
           <section className="pt-6 border-t border-gray-200 dark:border-gray-700">
             <div className="text-center text-sm text-gray-500 dark:text-gray-400">
               <p className="mb-2">© 2025 FTC Live Scout. All rights reserved.</p>
-              <p>
+              <p className="mb-3">
                 Made with ❤️ for the FIRST Tech Challenge community
               </p>
+              <div className="flex items-center justify-center gap-2 text-xs">
+                <img src="/FTC 19666 Logo.svg" alt="FTC Team 19666" className="w-6 h-6" />
+                <span>Created by FTC Team 19666 - Forever Knight Robotics</span>
+              </div>
             </div>
           </section>
         </div>
