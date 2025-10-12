@@ -167,11 +167,10 @@ export default function MatchesPage() {
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-md ${
-                        match.alliance === 'red' 
-                          ? 'bg-gradient-to-br from-red-500 to-rose-600' 
-                          : 'bg-gradient-to-br from-blue-500 to-amber-600'
-                      }`}>
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-md ${match.alliance === 'red'
+                          ? 'bg-gradient-to-br from-red-500 to-rose-600'
+                          : 'bg-gradient-to-br from-blue-500 to-blue-600'
+                        }`}>
                         {match.matchNumber}
                       </div>
                       <div>
@@ -241,8 +240,8 @@ export default function MatchesPage() {
                       <div className="text-center">
                         <div className="text-gray-600 dark:text-gray-400">Base</div>
                         <div className="font-bold text-xs text-gray-900 dark:text-white">
-                          {match.robotBase === 'FULL' ? 'Full' : 
-                           match.robotBase === 'PARTIAL' ? 'Partial' : '-'}
+                          {match.robotBase === 'FULL' ? 'Full' :
+                            match.robotBase === 'PARTIAL' ? 'Partial' : '-'}
                         </div>
                       </div>
                     </div>
