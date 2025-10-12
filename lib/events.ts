@@ -5,6 +5,8 @@ import { ID, Query } from 'appwrite';
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || 'ftclivescout_db';
 const EVENTS_COLLECTION_ID = 'events';
 
+export type UserRole = 'admin' | 'scouter' | 'driver' | 'engineer' | 'technician' | 'viewer';
+
 export interface Event {
   $id: string;
   $createdAt: string;
@@ -14,9 +16,11 @@ export interface Event {
   startDate: string;
   endDate: string;
   userId: string;
+  ownerName?: string;
   isActive: boolean;
   sharedWith?: string[]; // Array of user IDs who have access
   sharedWithNames?: string[]; // Array of user names for display
+  userRoles?: string[]; // Array of "userId:role" mappings
 }
 
 export interface CreateEventData {
@@ -25,6 +29,7 @@ export interface CreateEventData {
   startDate: string;
   endDate: string;
   userId: string;
+  ownerName?: string;
 }
 
 /**
@@ -62,9 +67,9 @@ export const getEvents = async (userId: string): Promise<Event[]> => {
         Query.orderDesc('$createdAt'),
       ]
     );
-    
+
     let sharedEvents: any[] = [];
-    
+
     // Try to get events shared with user (may fail if attribute doesn't exist yet)
     try {
       const sharedResponse = await databases.listDocuments(
@@ -86,18 +91,18 @@ export const getEvents = async (userId: string): Promise<Event[]> => {
         throw sharedError;
       }
     }
-    
+
     // Combine and deduplicate events
     const allEvents = [...ownedResponse.documents, ...sharedEvents];
     const uniqueEvents = Array.from(
       new Map(allEvents.map(event => [event.$id, event])).values()
     );
-    
+
     // Sort by creation date
-    uniqueEvents.sort((a, b) => 
+    uniqueEvents.sort((a, b) =>
       new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime()
     );
-    
+
     return uniqueEvents as Event[];
   } catch (error) {
     console.error('Error getting events:', error);
@@ -176,28 +181,62 @@ export const getCurrentEventId = (): string | null => {
 };
 
 /**
- * Share an event with another user by their user ID
- * Note: In a production app, you'd want to look up users by email using a server-side API
- * For now, we'll accept userId directly
+ * Get user's role for an event
  */
-export const shareEvent = async (eventId: string, targetUserId: string, targetUserName: string): Promise<Event> => {
+export const getUserRole = (event: Event, userId: string): UserRole | null => {
+  // Owner has all roles
+  if (event.userId === userId) {
+    return 'admin';
+  }
+
+  // Check userRoles array for role mapping
+  if (event.userRoles && event.userRoles.length > 0) {
+    const roleMapping = event.userRoles.find(r => r.startsWith(`${userId}:`));
+    if (roleMapping) {
+      const role = roleMapping.split(':')[1] as UserRole;
+      return role;
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Check if user can edit data (not viewer role)
+ */
+export const canEditData = (event: Event, userId: string): boolean => {
+  const role = getUserRole(event, userId);
+  return role !== null && role !== 'viewer';
+};
+
+/**
+ * Share an event with another user by their user ID with a specific role
+ */
+export const shareEvent = async (
+  eventId: string,
+  targetUserId: string,
+  targetUserName: string,
+  role: UserRole = 'scouter'
+): Promise<Event> => {
   try {
     // Get the current event to check existing shares
     const event = await getEvent(eventId);
-    
+
     // Initialize arrays if they don't exist
     const sharedWith = event.sharedWith || [];
     const sharedWithNames = event.sharedWithNames || [];
-    
+    const userRoles = event.userRoles || [];
+
     // Check if already shared
     if (sharedWith.includes(targetUserId)) {
       throw new Error('Event is already shared with this user');
     }
-    
+
     // Add the new user
     sharedWith.push(targetUserId);
     sharedWithNames.push(targetUserName);
-    
+    userRoles.push(`${targetUserId}:${role}`);
+
     // Update the event
     try {
       const updatedEvent = await databases.updateDocument(
@@ -207,19 +246,50 @@ export const shareEvent = async (eventId: string, targetUserId: string, targetUs
         {
           sharedWith,
           sharedWithNames,
+          userRoles,
         }
       );
-      
+
       return updatedEvent as unknown as Event;
     } catch (updateError: any) {
       // Check if the error is due to missing attributes
       if (updateError.code === 400 && updateError.message?.includes('Unknown attribute')) {
-        throw new Error('Event sharing is not yet enabled. Please add the "sharedWith" and "sharedWithNames" attributes to the events collection in your Appwrite database.');
+        throw new Error('Event sharing is not yet enabled. Please add the required attributes to the events collection in your Appwrite database.');
       }
       throw updateError;
     }
   } catch (error: any) {
     console.error('Error sharing event:', error);
+    throw error;
+  }
+};
+
+/**
+ * Update a user's role for an event
+ */
+export const updateUserRole = async (eventId: string, targetUserId: string, newRole: UserRole): Promise<Event> => {
+  try {
+    const event = await getEvent(eventId);
+    const userRoles = event.userRoles || [];
+
+    // Find and update the role
+    const roleIndex = userRoles.findIndex(r => r.startsWith(`${targetUserId}:`));
+    if (roleIndex === -1) {
+      throw new Error('User does not have access to this event');
+    }
+
+    userRoles[roleIndex] = `${targetUserId}:${newRole}`;
+
+    const updatedEvent = await databases.updateDocument(
+      DATABASE_ID,
+      EVENTS_COLLECTION_ID,
+      eventId,
+      { userRoles }
+    );
+
+    return updatedEvent as unknown as Event;
+  } catch (error: any) {
+    console.error('Error updating user role:', error);
     throw error;
   }
 };
@@ -231,22 +301,29 @@ export const unshareEvent = async (eventId: string, targetUserId: string): Promi
   try {
     // Get the current event
     const event = await getEvent(eventId);
-    
+
     // Initialize arrays if they don't exist
     const sharedWith = event.sharedWith || [];
     const sharedWithNames = event.sharedWithNames || [];
-    
+    const userRoles = event.userRoles || [];
+
     // Find the user's index
     const userIndex = sharedWith.indexOf(targetUserId);
-    
+
     if (userIndex === -1) {
       throw new Error('User does not have access to this event');
     }
-    
+
     // Remove the user
     sharedWith.splice(userIndex, 1);
     sharedWithNames.splice(userIndex, 1);
-    
+
+    // Remove the role mapping
+    const roleIndex = userRoles.findIndex(r => r.startsWith(`${targetUserId}:`));
+    if (roleIndex !== -1) {
+      userRoles.splice(roleIndex, 1);
+    }
+
     // Update the event
     try {
       const updatedEvent = await databases.updateDocument(
@@ -256,14 +333,15 @@ export const unshareEvent = async (eventId: string, targetUserId: string): Promi
         {
           sharedWith,
           sharedWithNames,
+          userRoles,
         }
       );
-      
+
       return updatedEvent as unknown as Event;
     } catch (updateError: any) {
       // Check if the error is due to missing attributes
       if (updateError.code === 400 && updateError.message?.includes('Unknown attribute')) {
-        throw new Error('Event sharing is not yet enabled. Please add the "sharedWith" and "sharedWithNames" attributes to the events collection in your Appwrite database.');
+        throw new Error('Event sharing is not yet enabled. Please add the required attributes to the events collection in your Appwrite database.');
       }
       throw updateError;
     }

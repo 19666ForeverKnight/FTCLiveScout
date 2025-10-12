@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { Navigation } from '@/components/Navigation';
 import { getPitScouts, PitScout } from '@/lib/scouts';
+import { canEditData } from '@/lib/events';
 
 export default function PitsPage() {
   const { user, loading } = useAuth();
@@ -236,6 +237,28 @@ export default function PitsPage() {
                       )}
                     </div>
                   )}
+
+                  {/* Last Edited Info */}
+                  {(pit.lastEditedByName || pit.createdByName) && (
+                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {pit.lastEditedByName ? (
+                          <>
+                            <span className="font-medium">Last edited by:</span> {pit.lastEditedByName}
+                            {pit.lastEditedAt && (
+                              <span className="ml-2">
+                                {new Date(pit.lastEditedAt).toLocaleString()}
+                              </span>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <span className="font-medium">Created by:</span> {pit.createdByName}
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -243,15 +266,17 @@ export default function PitsPage() {
         </div>
       </main>
 
-      {/* Floating Add Button */}
-      <button
-        onClick={() => router.push('/pit-scout')}
-        className="fixed bottom-24 lg:bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 z-50 group"
-      >
-        <svg className="w-6 h-6 group-hover:rotate-90 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-        </svg>
-      </button>
+      {/* Floating Add Button - Only show if user can edit */}
+      {currentEvent && canEditData(currentEvent, user.$id) && (
+        <button
+          onClick={() => router.push('/pit-scout')}
+          className="fixed bottom-24 lg:bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 z-50 group"
+        >
+          <svg className="w-6 h-6 group-hover:rotate-90 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }

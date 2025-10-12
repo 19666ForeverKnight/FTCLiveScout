@@ -8,6 +8,7 @@ import { Navigation } from '@/components/Navigation';
 import { EditEventModal } from '@/components/EditEventModal';
 import ShareEventModal from '@/components/ShareEventModal';
 import { getMatchScouts, getPitScouts, getRecentActivity, RecentActivity } from '@/lib/scouts';
+import { canEditData } from '@/lib/events';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -146,15 +147,17 @@ export default function DashboardPage() {
                     </svg>
                   </button>
                 )}
-                <button
-                  onClick={() => setIsEditModalOpen(true)}
-                  className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ml-2"
-                  title="Edit Event"
-                >
-                  <svg className="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                </button>
+                {currentEvent && canEditData(currentEvent, user?.$id || '') && (
+                  <button
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ml-2"
+                    title="Edit Event"
+                  >
+                    <svg className="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -190,16 +193,18 @@ export default function DashboardPage() {
                     Share
                   </button>
                 )}
-                <button
-                  onClick={() => setIsEditModalOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all"
-                  title="Edit Event"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                  Edit
-                </button>
+                {currentEvent && canEditData(currentEvent, user?.$id || '') && (
+                  <button
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all"
+                    title="Edit Event"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Edit
+                  </button>
+                )}
               </div>
             </div>
 
@@ -228,7 +233,7 @@ export default function DashboardPage() {
                   </p>
                 </div>
               </div>
-              
+
               {/* Desktop Layout - Horizontal */}
               <div className="hidden lg:flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -352,11 +357,10 @@ export default function DashboardPage() {
                       className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${
-                          activity.type === 'match'
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-xl ${activity.type === 'match'
                             ? 'bg-blue-100 dark:bg-blue-900/20'
                             : 'bg-green-100 dark:bg-green-900/20'
-                        }`}>
+                          }`}>
                           {activity.type === 'match' ? '🎯' : '🔧'}
                         </div>
                         <div>
@@ -374,11 +378,10 @@ export default function DashboardPage() {
                           </p>
                         </div>
                       </div>
-                      <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        activity.type === 'match'
+                      <div className={`px-3 py-1 rounded-full text-xs font-medium ${activity.type === 'match'
                           ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
                           : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                      }`}>
+                        }`}>
                         {activity.type === 'match' ? 'Match' : 'Pit'}
                       </div>
                     </div>

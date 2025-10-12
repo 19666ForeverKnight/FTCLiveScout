@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { Navigation } from '@/components/Navigation';
 import { getMatchScouts, MatchScout } from '@/lib/scouts';
+import { canEditData } from '@/lib/events';
 
 export default function MatchesPage() {
   const { user, loading } = useAuth();
@@ -168,8 +169,8 @@ export default function MatchesPage() {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-md ${match.alliance === 'red'
-                          ? 'bg-gradient-to-br from-red-500 to-rose-600'
-                          : 'bg-gradient-to-br from-blue-500 to-blue-600'
+                        ? 'bg-gradient-to-br from-red-500 to-rose-600'
+                        : 'bg-gradient-to-br from-blue-500 to-blue-600'
                         }`}>
                         {match.matchNumber}
                       </div>
@@ -286,6 +287,28 @@ export default function MatchesPage() {
                     </div>
                   </div>
 
+                  {/* Last Edited Info */}
+                  {(match.lastEditedByName || match.createdByName) && (
+                    <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {match.lastEditedByName ? (
+                          <>
+                            <span className="font-medium">Last edited by:</span> {match.lastEditedByName}
+                            {match.lastEditedAt && (
+                              <span className="ml-2">
+                                {new Date(match.lastEditedAt).toLocaleString()}
+                              </span>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <span className="font-medium">Created by:</span> {match.createdByName}
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  )}
+
                   {match.notes && (
                     <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-800">
                       <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
@@ -300,15 +323,17 @@ export default function MatchesPage() {
         </div>
       </main>
 
-      {/* Floating Add Button */}
-      <button
-        onClick={() => router.push('/match-scout')}
-        className="fixed bottom-24 lg:bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 z-50 group"
-      >
-        <svg className="w-6 h-6 group-hover:rotate-90 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-        </svg>
-      </button>
+      {/* Floating Add Button - Only show if user can edit */}
+      {currentEvent && canEditData(currentEvent, user.$id) && (
+        <button
+          onClick={() => router.push('/match-scout')}
+          className="fixed bottom-24 lg:bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-200 z-50 group"
+        >
+          <svg className="w-6 h-6 group-hover:rotate-90 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }

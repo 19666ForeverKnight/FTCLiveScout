@@ -67,7 +67,7 @@ export function EventProvider({ children }: { children: ReactNode }) {
 
   const loadEvents = async () => {
     if (!user?.$id) return;
-    
+
     try {
       setLoading(true);
       const fetchedEvents = await getEvents(user.$id);
@@ -86,45 +86,46 @@ export function EventProvider({ children }: { children: ReactNode }) {
 
   const createNewEvent = async (data: CreateEventData): Promise<Event> => {
     if (!user?.$id) throw new Error('User not authenticated');
-    
+
     const eventData = {
       ...data,
       userId: user.$id,
+      ownerName: user.name,
     };
 
     const newEvent = await createEvent(eventData);
     await loadEvents();
-    
+
     // Set as current event if it's the first one
     if (events.length === 0) {
       setCurrentEvent(newEvent);
     }
-    
+
     return newEvent;
   };
 
   const updateEventData = async (eventId: string, data: Partial<CreateEventData>): Promise<Event> => {
     const updatedEvent = await updateEvent(eventId, data);
     await loadEvents();
-    
+
     // Update current event if it's the one being updated
     if (currentEvent?.$id === eventId) {
       const refreshedEvent = await getEvent(eventId);
       setCurrentEventState(refreshedEvent);
     }
-    
+
     return updatedEvent;
   };
 
   const deleteEventData = async (eventId: string): Promise<void> => {
     await deleteEvent(eventId);
-    
+
     // If deleting current event, switch to another
     if (currentEvent?.$id === eventId) {
       setCurrentEvent(null);
       setCurrentEventId(null);
     }
-    
+
     await loadEvents();
   };
 

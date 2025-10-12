@@ -64,7 +64,9 @@ export interface PitScout {
   imageId?: string;
   pitNumber?: string;
   createdBy?: string; // User ID who created
+  createdByName?: string; // Name of user who created
   lastEditedBy?: string; // User ID who last edited
+  lastEditedByName?: string; // Name of user who last edited
   lastEditedAt?: string; // ISO date string
 }
 
@@ -120,8 +122,8 @@ export interface CreatePitScoutData {
  * Create a new match scout report
  */
 export const createMatchScout = async (
-  data: CreateMatchScoutData, 
-  createdByUserId: string, 
+  data: CreateMatchScoutData,
+  createdByUserId: string,
   createdByUserName: string
 ): Promise<MatchScout> => {
   try {
@@ -166,8 +168,8 @@ export const getMatchScouts = async (eventId: string): Promise<MatchScout[]> => 
  * Create a new pit scout report
  */
 export const createPitScout = async (
-  data: CreatePitScoutData, 
-  createdByUserId: string, 
+  data: CreatePitScoutData,
+  createdByUserId: string,
   createdByUserName: string
 ): Promise<PitScout> => {
   try {
@@ -178,6 +180,7 @@ export const createPitScout = async (
       {
         ...data,
         createdBy: createdByUserId,
+        createdByName: createdByUserName,
       }
     );
     return scout as unknown as PitScout;
@@ -215,7 +218,7 @@ export const getPitScout = async (pitScoutId: string): Promise<PitScout> => {
     console.log('getPitScout called with ID:', pitScoutId);
     console.log('Database ID:', DATABASE_ID);
     console.log('Collection ID:', PIT_SCOUTS_COLLECTION_ID);
-    
+
     const scout = await databases.getDocument(
       DATABASE_ID,
       PIT_SCOUTS_COLLECTION_ID,
@@ -284,7 +287,7 @@ export const updateMatchScout = async (
  * Update an existing pit scout
  */
 export const updatePitScout = async (
-  scoutId: string, 
+  scoutId: string,
   data: Partial<CreatePitScoutData>,
   editedByUserId: string,
   editedByUserName: string
@@ -297,6 +300,7 @@ export const updatePitScout = async (
       {
         ...data,
         lastEditedBy: editedByUserId,
+        lastEditedByName: editedByUserName,
         lastEditedAt: new Date().toISOString(),
       }
     );
