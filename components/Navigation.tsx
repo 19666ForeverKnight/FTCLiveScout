@@ -3,12 +3,21 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEvent } from '@/context/EventContext';
+import { useAuth } from '@/context/AuthContext';
+import { getUserRole } from '@/lib/events';
 
 export function Navigation() {
   const pathname = usePathname();
   const { currentEvent } = useEvent();
+  const { user } = useAuth();
 
   const isActive = (path: string) => pathname === path;
+  
+  // Check if user can see checklists (not viewer or scouter)
+  const canSeeChecklists = currentEvent && user && (() => {
+    const role = getUserRole(currentEvent, user.$id);
+    return role && ['admin', 'driver', 'engineer', 'technician'].includes(role);
+  })();
 
   return (
     <>
@@ -70,6 +79,19 @@ export function Navigation() {
                   <span className="text-xl mr-3">📊</span>
                   Analytics
                 </Link>
+                {canSeeChecklists && (
+                  <Link
+                    href="/checklists"
+                    className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${
+                      isActive('/checklists')
+                        ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 shadow-sm'
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    <span className="text-xl mr-3">✅</span>
+                    Checklists
+                  </Link>
+                )}
               </>
             )}
           </nav>
@@ -131,6 +153,19 @@ export function Navigation() {
               <span className="text-2xl mb-1">📊</span>
               <span className="text-xs font-medium">Analytics</span>
             </Link>
+            {canSeeChecklists && (
+              <Link
+                href="/checklists"
+                className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${
+                  isActive('/checklists')
+                    ? 'text-orange-600 dark:text-orange-400'
+                    : 'text-gray-600 dark:text-gray-400'
+                }`}
+              >
+                <span className="text-2xl mb-1">✅</span>
+                <span className="text-xs font-medium">Checklists</span>
+              </Link>
+            )}
           </div>
         </nav>
       )}
