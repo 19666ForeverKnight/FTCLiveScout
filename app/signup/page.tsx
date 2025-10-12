@@ -164,11 +164,10 @@ export default function SignupPage() {
                   type="password"
                   autoComplete="new-password"
                   required
-                  className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600 ${
-                    confirmPassword && password !== confirmPassword
+                  className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600 ${confirmPassword && password !== confirmPassword
                       ? 'border-red-300 dark:border-red-700'
                       : 'border-gray-200 dark:border-gray-700'
-                  }`}
+                    }`}
                   placeholder="Re-enter your password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
