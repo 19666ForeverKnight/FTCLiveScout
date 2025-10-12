@@ -312,6 +312,22 @@ export const updatePitScout = async (
 };
 
 /**
+ * Delete a match scout
+ */
+export const deleteMatchScout = async (matchScoutId: string): Promise<void> => {
+  try {
+    await databases.deleteDocument(
+      DATABASE_ID,
+      MATCH_SCOUTS_COLLECTION_ID,
+      matchScoutId
+    );
+  } catch (error) {
+    console.error('Error deleting match scout:', error);
+    throw error;
+  }
+};
+
+/**
  * Delete a pit scout and its associated image
  */
 export const deletePitScout = async (pitScoutId: string): Promise<void> => {

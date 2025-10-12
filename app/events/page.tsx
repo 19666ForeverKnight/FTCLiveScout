@@ -7,6 +7,7 @@ import { useEvent } from '@/context/EventContext';
 import { CreateEventModal } from '@/components/CreateEventModal';
 import ShareEventModal from '@/components/ShareEventModal';
 import type { Event } from '@/lib/events';
+import { deleteEvent } from '@/lib/events';
 
 export default function EventsPage() {
   const { user, loading, logout } = useAuth();
@@ -15,6 +16,7 @@ export default function EventsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [shareEventModal, setShareEventModal] = useState<Event | null>(null);
+  const [deletingEventId, setDeletingEventId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -27,6 +29,35 @@ export default function EventsPage() {
     if (event) {
       setCurrentEvent(event);
       router.push('/dashboard');
+    }
+  };
+
+  const handleDeleteEvent = async (event: Event) => {
+    const confirmMessage = `Are you sure you want to delete "${event.name}"?\n\nThis will permanently delete:\n• All match scouts\n• All pit scouts and images\n• All checklists\n• The event itself\n\nThis action cannot be undone.`;
+    
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      setDeletingEventId(event.$id);
+      
+      // If this is the current event, clear it
+      if (currentEvent?.$id === event.$id) {
+        setCurrentEvent(null);
+      }
+
+      await deleteEvent(event.$id);
+      
+      // Refresh the events list
+      await refreshEvents();
+      
+      alert('Event and all associated data deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      alert('Failed to delete event. Please try again.');
+    } finally {
+      setDeletingEventId(null);
     }
   };
 
@@ -173,29 +204,51 @@ export default function EventsPage() {
                   key={event.$id}
                   className="group relative bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md hover:shadow-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all duration-200 overflow-hidden"
                 >
-                  {/* Active Badge */}
+                  {/* Active Badge - Show at top left for owned events, top right for shared */}
                   {currentEvent?.$id === event.$id && (
-                    <div className="absolute top-4 right-4">
+                    <div className={`absolute top-4 ${event.userId === user?.$id ? 'left-4' : 'right-4'}`}>
                       <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full">
                         Active
                       </span>
                     </div>
                   )}
 
-                  {/* Share Button - Only for event owner */}
+                  {/* Action Buttons - Only for event owner */}
                   {event.userId === user?.$id && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShareEventModal(event);
-                      }}
-                      className="absolute top-4 right-20 p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
-                      title="Share event"
-                    >
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                      </svg>
-                    </button>
+                    <div className="absolute top-4 right-4 flex gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShareEventModal(event);
+                        }}
+                        className="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                        title="Share event"
+                      >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteEvent(event);
+                        }}
+                        disabled={deletingEventId === event.$id}
+                        className="p-2 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Delete event and all data"
+                      >
+                        {deletingEventId === event.$id ? (
+                          <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                        ) : (
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
                   )}
 
                   {/* Clickable area */}

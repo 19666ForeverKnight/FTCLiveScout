@@ -146,15 +146,64 @@ export const updateEvent = async (eventId: string, data: Partial<CreateEventData
 };
 
 /**
- * Delete an event
+ * Delete an event and all associated data (match scouts, pit scouts, checklists, and images)
  */
 export const deleteEvent = async (eventId: string): Promise<void> => {
   try {
+    // Import functions from other libs
+    const { getMatchScouts, deleteMatchScout } = await import('./scouts');
+    const { getPitScouts, deletePitScout } = await import('./scouts');
+    const { deleteEventChecklists } = await import('./checklists');
+
+    console.log(`Starting deletion of event ${eventId} and all associated data...`);
+
+    // 1. Delete all checklists for this event
+    try {
+      await deleteEventChecklists(eventId);
+      console.log('✓ Deleted all checklists');
+    } catch (error) {
+      console.error('Error deleting checklists:', error);
+      // Continue anyway
+    }
+
+    // 2. Delete all match scouts for this event
+    try {
+      const matchScouts = await getMatchScouts(eventId);
+      console.log(`Found ${matchScouts.length} match scouts to delete`);
+      
+      for (const matchScout of matchScouts) {
+        await deleteMatchScout(matchScout.$id);
+      }
+      console.log('✓ Deleted all match scouts');
+    } catch (error) {
+      console.error('Error deleting match scouts:', error);
+      // Continue anyway
+    }
+
+    // 3. Delete all pit scouts for this event (this will also delete associated images)
+    try {
+      const pitScouts = await getPitScouts(eventId);
+      console.log(`Found ${pitScouts.length} pit scouts to delete`);
+      
+      for (const pitScout of pitScouts) {
+        // deletePitScout will handle image deletion via cascade delete
+        await deletePitScout(pitScout.$id);
+      }
+      console.log('✓ Deleted all pit scouts and associated images');
+    } catch (error) {
+      console.error('Error deleting pit scouts:', error);
+      // Continue anyway
+    }
+
+    // 4. Finally, delete the event itself
     await databases.deleteDocument(
       DATABASE_ID,
       EVENTS_COLLECTION_ID,
       eventId
     );
+    console.log('✓ Deleted event');
+
+    console.log(`Successfully deleted event ${eventId} and all associated data`);
   } catch (error) {
     console.error('Error deleting event:', error);
     throw error;
