@@ -34,24 +34,24 @@ export default function EventsPage() {
 
   const handleDeleteEvent = async (event: Event) => {
     const confirmMessage = `Are you sure you want to delete "${event.name}"?\n\nThis will permanently delete:\n• All match scouts\n• All pit scouts and images\n• All checklists\n• The event itself\n\nThis action cannot be undone.`;
-    
+
     if (!window.confirm(confirmMessage)) {
       return;
     }
 
     try {
       setDeletingEventId(event.$id);
-      
+
       // If this is the current event, clear it
       if (currentEvent?.$id === event.$id) {
         setCurrentEvent(null);
       }
 
       await deleteEvent(event.$id);
-      
+
       // Refresh the events list
       await refreshEvents();
-      
+
       alert('Event and all associated data deleted successfully!');
     } catch (error) {
       console.error('Error deleting event:', error);
@@ -92,10 +92,10 @@ export default function EventsPage() {
             <div className="flex items-center">
               <div className="relative group">
                 <div className="absolute bg-gradient-to-r from-blue-600 to-amber-500 rounded-lg blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
-                <img 
-                  src="/logo.png" 
-                  alt="FTC Live Scout" 
-                  className="relative h-12 w-auto sm:h-15 rounded-lg shadow-lg group-hover:scale-105 transition-transform duration-300" 
+                <img
+                  src="/logo.png"
+                  alt="FTC Live Scout"
+                  className="relative h-12 w-auto sm:h-15 rounded-lg shadow-lg group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
             </div>
@@ -308,7 +308,7 @@ export default function EventsPage() {
                   </button>
                 </div>
               ))}
-              
+
               {/* Create New Event Card */}
               <button
                 onClick={() => setIsCreateModalOpen(true)}

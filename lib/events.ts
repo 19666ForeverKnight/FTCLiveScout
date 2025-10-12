@@ -170,7 +170,7 @@ export const deleteEvent = async (eventId: string): Promise<void> => {
     try {
       const matchScouts = await getMatchScouts(eventId);
       console.log(`Found ${matchScouts.length} match scouts to delete`);
-      
+
       for (const matchScout of matchScouts) {
         await deleteMatchScout(matchScout.$id);
       }
@@ -184,7 +184,7 @@ export const deleteEvent = async (eventId: string): Promise<void> => {
     try {
       const pitScouts = await getPitScouts(eventId);
       console.log(`Found ${pitScouts.length} pit scouts to delete`);
-      
+
       for (const pitScout of pitScouts) {
         // deletePitScout will handle image deletion via cascade delete
         await deletePitScout(pitScout.$id);
