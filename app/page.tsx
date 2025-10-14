@@ -4,30 +4,24 @@ import { createT } from '@/lib/simple-i18n';
 const t = createT('app/page')
 import Link from "next/link";
 import Image from "next/image";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Home() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
 
-  // Redirect authenticated users to events page
+  // Redirect logged-in users to events page (happens in background)
   useEffect(() => {
-    if (!loading && user) {
+    if (user) {
       router.push('/events');
     }
-  }, [user, loading, router]);
+  }, [user, router]);
 
-  if (loading) {
-    return (
-      (<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-amber-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
-        <div className="text-lg text-gray-600 dark:text-gray-400">{t('Loading...')}</div>
-      </div>)
-    );
-  }
-
+  // Always show the landing page immediately
+  // If user is logged in, they'll be redirected in the background
   return (
     (<div className="min-h-screen bg-gradient-to-br from-blue-50 via-amber-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Hero Section */}

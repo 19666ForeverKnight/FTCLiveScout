@@ -4,11 +4,11 @@ import { createT } from '@/lib/simple-i18n';
 const t = createT('profile/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
 import { updateName, updateEmail, updatePassword } from '@/lib/auth';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export default function ProfilePage() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useRequireAuth();
   const router = useRouter();
 
   const [isEditingName, setIsEditingName] = useState(false);
@@ -27,14 +27,11 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
     if (user) {
       setNewName(user.name || '');
       setNewEmail(user.email);
     }
-  }, [user, loading, router]);
+  }, [user]);
 
   const showMessage = (message: string, isError = false) => {
     if (isError) {

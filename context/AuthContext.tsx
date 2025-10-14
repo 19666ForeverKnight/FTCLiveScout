@@ -7,22 +7,40 @@ import { getCurrentUser, login, logout, signup, LoginData, SignupData } from '@/
 interface AuthContextType {
   user: Models.User<Models.Preferences> | null;
   loading: boolean;
+  initialCheckDone: boolean;
   login: (data: LoginData) => Promise<void>;
   signup: (data: SignupData) => Promise<void>;
   logout: () => Promise<void>;
+  checkUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [initialCheckDone, setInitialCheckDone] = useState(false);
 
+  // Check user session on initial mount (silently in background)
   useEffect(() => {
-    checkUser();
+    checkUserSilently();
   }, []);
 
+  async function checkUserSilently() {
+    if (initialCheckDone) return;
+    
+    try {
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
+    } catch (error) {
+      setUser(null);
+    } finally {
+      setInitialCheckDone(true);
+    }
+  }
+
   async function checkUser() {
+    setLoading(true);
     try {
       const currentUser = await getCurrentUser();
       setUser(currentUser);
@@ -30,6 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
     } finally {
       setLoading(false);
+      setInitialCheckDone(true);
     }
   }
 
@@ -46,14 +65,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function handleLogout() {
     await logout();
     setUser(null);
+    setInitialCheckDone(true);
   }
 
   const value = {
     user,
     loading,
+    initialCheckDone,
     login: handleLogin,
     signup: handleSignup,
     logout: handleLogout,
+    checkUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -4,14 +4,14 @@ import { createT } from '@/lib/simple-i18n';
 const t = createT('matches/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { Navigation } from '@/components/Navigation';
 import { getMatchScouts, MatchScout } from '@/lib/scouts';
 import { canEditData } from '@/lib/events';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export default function MatchesPage() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useRequireAuth();
   const { currentEvent } = useEvent();
   const router = useRouter();
   const [matches, setMatches] = useState<MatchScout[]>([]);
@@ -19,9 +19,7 @@ export default function MatchesPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    } else if (!loading && user && !currentEvent) {
+    if (!loading && user && !currentEvent) {
       router.push('/events');
     }
   }, [user, loading, currentEvent, router]);

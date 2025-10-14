@@ -4,7 +4,6 @@ import { createT } from '@/lib/simple-i18n';
 const t = createT('checklists/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { Navigation } from '@/components/Navigation';
 import {
@@ -19,9 +18,10 @@ import {
     ChecklistRole,
 } from '@/lib/checklists';
 import { getUserRole } from '@/lib/events';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export default function ChecklistsPage() {
-    const { user, loading } = useAuth();
+    const { user, loading } = useRequireAuth();
     const { currentEvent } = useEvent();
     const router = useRouter();
     const [checklists, setChecklists] = useState<Checklist[]>([]);
@@ -29,9 +29,7 @@ export default function ChecklistsPage() {
     const [userRole, setUserRole] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!loading && !user) {
-            router.push('/login');
-        } else if (!loading && user && !currentEvent) {
+        if (!loading && user && !currentEvent) {
             router.push('/events');
         }
     }, [user, loading, currentEvent, router]);

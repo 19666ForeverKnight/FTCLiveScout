@@ -2,20 +2,14 @@
 
 import { createT } from '@/lib/simple-i18n';
 const t = createT('user-agreement/page')
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export default function UserAgreementPage() {
   const [accepted, setAccepted] = useState(false);
   const router = useRouter();
-  const { user, loading } = useAuth();
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
+  const { user, loading } = useRequireAuth();
 
   if (loading) {
     return (

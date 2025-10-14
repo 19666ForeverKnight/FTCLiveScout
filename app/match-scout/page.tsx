@@ -4,15 +4,15 @@ import { createT } from '@/lib/simple-i18n';
 const t = createT('match-scout/page')
 import { Suspense, useEffect, useState, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { Navigation } from '@/components/Navigation';
 import { createMatchScout } from '@/lib/scouts';
 import { databases } from '@/lib/appwrite';
 import { canEditData } from '@/lib/events';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 function MatchScoutForm() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useRequireAuth();
   const { currentEvent } = useEvent();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -150,12 +150,6 @@ function MatchScoutForm() {
 
     loadMatchScout();
   }, [editId]);
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

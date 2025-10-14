@@ -4,16 +4,16 @@ import { createT } from '@/lib/simple-i18n';
 const t = createT('pit-scout/page')
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { Navigation } from '@/components/Navigation';
 import { createPitScout, getPitScout, updatePitScout, deletePitScout } from '@/lib/scouts';
 import { storage } from '@/lib/appwrite';
 import { ID } from 'appwrite';
 import { canEditData } from '@/lib/events';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 function PitScoutForm() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useRequireAuth();
   const { currentEvent } = useEvent();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -41,12 +41,6 @@ function PitScoutForm() {
     weaknesses: '',
     notes: '',
   });
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
 
   // Keyboard navigation for lightbox
   useEffect(() => {

@@ -2,7 +2,7 @@
 
 import { createT } from '@/lib/simple-i18n';
 const t = createT('events/page')
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
@@ -12,21 +12,17 @@ import ShareEventModal from '@/components/ShareEventModal';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import type { Event } from '@/lib/events';
 import { deleteEvent } from '@/lib/events';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export default function EventsPage() {
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useRequireAuth(); // This will handle auth check and redirect
+  const { logout } = useAuth();
   const { events, currentEvent, setCurrentEvent, refreshEvents } = useEvent();
   const router = useRouter();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [shareEventModal, setShareEventModal] = useState<Event | null>(null);
   const [deletingEventId, setDeletingEventId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
 
   const handleEventClick = (eventId: string) => {
     const event = events.find(e => e.$id === eventId);

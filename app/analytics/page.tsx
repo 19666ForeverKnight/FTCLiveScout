@@ -4,10 +4,10 @@ import { createT } from '@/lib/simple-i18n';
 const t = createT('analytics/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { Navigation } from '@/components/Navigation';
 import { getMatchScouts, getPitScouts, MatchScout, PitScout } from '@/lib/scouts';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 interface ScoreStatistics {
   mean: number;
@@ -98,7 +98,7 @@ const calculateStatistics = (values: number[]): ScoreStatistics => {
 };
 
 export default function AnalyticsPage() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useRequireAuth();
   const { currentEvent } = useEvent();
   const router = useRouter();
 
@@ -114,9 +114,7 @@ export default function AnalyticsPage() {
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    } else if (!loading && user && !currentEvent) {
+    if (!loading && user && !currentEvent) {
       router.push('/events');
     }
   }, [user, loading, currentEvent, router]);

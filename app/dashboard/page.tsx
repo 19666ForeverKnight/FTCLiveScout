@@ -4,16 +4,16 @@ import { createT } from '@/lib/simple-i18n';
 const t = createT('dashboard/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { Navigation } from '@/components/Navigation';
 import { EditEventModal } from '@/components/EditEventModal';
 import ShareEventModal from '@/components/ShareEventModal';
 import { getMatchScouts, getPitScouts, getRecentActivity, RecentActivity } from '@/lib/scouts';
 import { canEditData, getUserRole } from '@/lib/events';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useRequireAuth();
   const { currentEvent, refreshEvents } = useEvent();
   const router = useRouter();
   const [stats, setStats] = useState({ matches: 0, pits: 0, teams: 0 });
@@ -24,9 +24,7 @@ export default function DashboardPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    } else if (!loading && user && !currentEvent) {
+    if (!loading && user && !currentEvent) {
       // Redirect to events page if no event is selected
       router.push('/events');
     }
