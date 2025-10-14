@@ -175,8 +175,8 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
                       key={role}
                       onClick={() => setSelectedRole(role)}
                       className={`p-3 rounded-lg border-2 transition-all text-left ${selectedRole === role
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                         }`}
                     >
                       <div className="flex items-center gap-2 mb-1">
@@ -246,7 +246,7 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
                       key={colabUserId}
                       className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     >
-                        <div className="flex items-start justify-between">
+                      <div className="flex items-start justify-between">
                         <div className="flex items-center space-x-3 flex-1">
                           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-amber-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
                             {collaboratorNames[index]?.charAt(0).toUpperCase() || '?'}
@@ -265,8 +265,8 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
                                     key={role}
                                     onClick={() => handleRoleChange(colabUserId, role)}
                                     className={`px-2 py-1 rounded text-xs font-medium transition-colors ${userRole === role
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
+                                      ? 'bg-blue-500 text-white'
+                                      : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
                                       }`}
                                   >
                                     {ROLE_ICONS[role]} {role}
