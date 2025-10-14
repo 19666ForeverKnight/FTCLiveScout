@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import { useEvent } from '@/context/EventContext';
+import { createT } from '@/lib/simple-i18n';
+
+const t = createT('components/CreateEventModal');
 
 interface CreateEventModalProps {
   isOpen: boolean;
@@ -32,7 +35,7 @@ export function CreateEventModal({ isOpen, onClose }: CreateEventModalProps) {
       setFormData({ name: '', location: '', startDate: '', endDate: '' });
       onClose();
     } catch (err: any) {
-      setError(err.message || 'Failed to create event');
+      setError(err.message || t('Failed to create event'));
     } finally {
       setLoading(false);
     }
@@ -45,7 +48,7 @@ export function CreateEventModal({ isOpen, onClose }: CreateEventModalProps) {
       <div className="bg-white dark:bg-gray-900 rounded-2xl max-w-md w-full shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Create New Event</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('Create New Event')}</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -66,28 +69,28 @@ export function CreateEventModal({ isOpen, onClose }: CreateEventModalProps) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Event Name *
+              {t('Event Name')} *
             </label>
             <input
               type="text"
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="e.g., State Championship 2025"
+              placeholder={t('e.g., State Championship 2025')}
               className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Location *
+              {t('Location')} *
             </label>
             <input
               type="text"
               required
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              placeholder="e.g., City High School"
+              placeholder={t('e.g., City High School')}
               className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             />
           </div>
@@ -95,7 +98,7 @@ export function CreateEventModal({ isOpen, onClose }: CreateEventModalProps) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Start Date *
+                {t('Start Date')} *
               </label>
               <input
                 type="date"
@@ -108,7 +111,7 @@ export function CreateEventModal({ isOpen, onClose }: CreateEventModalProps) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                End Date *
+                {t('End Date')} *
               </label>
               <input
                 type="date"
@@ -127,14 +130,14 @@ export function CreateEventModal({ isOpen, onClose }: CreateEventModalProps) {
               onClick={onClose}
               className="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium"
             >
-              Cancel
+              {t('Cancel')}
             </button>
             <button
               type="submit"
               disabled={loading}
               className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-amber-600 text-white rounded-lg hover:from-blue-700 hover:to-amber-700 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating...' : 'Create Event'}
+              {loading ? t('Creating...') : t('Create Event')}
             </button>
           </div>
         </form>

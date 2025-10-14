@@ -1,5 +1,7 @@
 'use client';
 
+import { createT } from '@/lib/simple-i18n';
+const t = createT('dashboard/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -73,7 +75,7 @@ export default function DashboardPage() {
         teams: uniqueTeams.size,
       });
     } catch (error) {
-      console.error('Error loading event data:', error);
+      console.error(t('Error loading event data:'), error);
     } finally {
       setLoadingData(false);
     }
@@ -81,9 +83,9 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
-      </div>
+      (<div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">{t('Loading...')}</div>
+      </div>)
     );
   }
 
@@ -92,9 +94,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    (<div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navigation />
-
       {/* Main Content with proper padding for sidebar and bottom nav */}
       <main className="lg:pl-64 pb-20 lg:pb-8">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -108,7 +109,7 @@ export default function DashboardPage() {
               <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              All Events
+              {t('All Events')}
             </button>
 
             {/* Mobile Back Button - Floating top bar */}
@@ -140,7 +141,7 @@ export default function DashboardPage() {
                   <button
                     onClick={() => setIsShareModalOpen(true)}
                     className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors ml-2"
-                    title="Share Event"
+                    title={t('Share Event')}
                   >
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -151,7 +152,7 @@ export default function DashboardPage() {
                   <button
                     onClick={() => setIsEditModalOpen(true)}
                     className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ml-2"
-                    title="Edit Event"
+                    title={t('Edit Event')}
                   >
                     <svg className="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -185,24 +186,24 @@ export default function DashboardPage() {
                   <button
                     onClick={() => setIsShareModalOpen(true)}
                     className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 hover:border-blue-300 dark:hover:border-blue-700 transition-all"
-                    title="Share Event"
+                    title={t('Share Event')}
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                     </svg>
-                    Share
+                    {t('Share')}
                   </button>
                 )}
                 {currentEvent && canEditData(currentEvent, user?.$id || '') && (
                   <button
                     onClick={() => setIsEditModalOpen(true)}
                     className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all"
-                    title="Edit Event"
+                    title={t('Edit Event')}
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
-                    Edit
+                    {t('Edit')}
                   </button>
                 )}
               </div>
@@ -220,14 +221,14 @@ export default function DashboardPage() {
                     🕐
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400">Current Time</p>
+                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400">{t('Current Time')}</p>
                     <p className="text-lg font-bold text-gray-900 dark:text-white font-mono">
                       {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs font-medium text-gray-600 dark:text-gray-400">Date</p>
+                  <p className="text-xs font-medium text-gray-600 dark:text-gray-400">{t('Date')}</p>
                   <p className="text-xs font-semibold text-gray-900 dark:text-white whitespace-nowrap">
                     {currentTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </p>
@@ -241,14 +242,14 @@ export default function DashboardPage() {
                     🕐
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Current Time</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('Current Time')}</p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white font-mono">
                       {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Date</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('Date')}</p>
                   <p className="text-base font-semibold text-gray-900 dark:text-white">
                     {currentTime.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
                   </p>
@@ -266,13 +267,13 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Total Matches
+                    {t('Total Matches')}
                   </p>
                   <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
                     {loadingData ? '...' : stats.matches}
                   </p>
                   <p className="text-xs text-green-600 dark:text-green-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    View all matches →
+                    {t('View all matches →')}
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
@@ -288,13 +289,13 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Pit Reports
+                    {t('Pit Reports')}
                   </p>
                   <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
                     {loadingData ? '...' : stats.pits}
                   </p>
                   <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    View all pits →
+                    {t('View all pits →')}
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-amber-100 dark:from-blue-900/20 dark:to-amber-900/20 rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
@@ -307,13 +308,13 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Teams Scouted
+                    {t('Teams Scouted')}
                   </p>
                   <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
                     {loadingData ? '...' : stats.teams}
                   </p>
                   <p className="text-xs text-gray-600 dark:text-gray-400 mt-2 opacity-0">
-                    Placeholder text
+                    {t('Placeholder text')}
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-amber-100 dark:from-blue-900/20 dark:to-amber-900/20 rounded-lg flex items-center justify-center text-2xl">
@@ -341,15 +342,15 @@ export default function DashboardPage() {
                       <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                         {(() => {
                           const role = getUserRole(currentEvent, user.$id);
-                          return role === 'admin' ? 'Event Checklists' : 'My Checklist';
+                          return role === 'admin' ? t('Event Checklists') : t('My Checklist');
                         })()}
                       </h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {(() => {
                           const role = getUserRole(currentEvent, user.$id);
                           return role === 'admin'
-                            ? 'Manage all role checklists'
-                            : 'Manage your personal pre-match checklist';
+                            ? t('Manage all role checklists')
+                            : t('Manage your personal pre-match checklist');
                         })()}
                       </p>
                     </div>
@@ -370,13 +371,13 @@ export default function DashboardPage() {
           <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md border border-gray-200 dark:border-gray-800">
             <div className="p-6 border-b border-gray-200 dark:border-gray-800">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                Recent Activity
+                {t('Recent Activity')}
               </h2>
             </div>
             <div className="p-6">
               {loadingData ? (
                 <div className="text-center py-12">
-                  <div className="text-gray-500 dark:text-gray-400">Loading activity...</div>
+                  <div className="text-gray-500 dark:text-gray-400">{t('Loading activity...')}</div>
                 </div>
               ) : recentActivity.length === 0 ? (
                 <div className="text-center py-12">
@@ -384,11 +385,11 @@ export default function DashboardPage() {
                     📋
                   </div>
                   <p className="text-gray-500 dark:text-gray-400 mb-4">
-                    {currentEvent ? 'No scouting records yet' : 'Select an event to view activity'}
+                    {currentEvent ? t('No scouting records yet') : t('Select an event to view activity')}
                   </p>
                   {currentEvent && (
                     <p className="text-sm text-gray-400 dark:text-gray-500">
-                      Go to <span className="text-green-600 dark:text-green-400 font-semibold">Matches</span> or <span className="text-blue-600 dark:text-blue-400 font-semibold">Pits</span> and click the <span className="text-blue-600 dark:text-blue-400 font-semibold">+</span> button to create your first scout report
+                      {t('Go to')} <span className="text-green-600 dark:text-green-400 font-semibold">{t('Matches')}</span> {t('or')} <span className="text-blue-600 dark:text-blue-400 font-semibold">{t('Pits')}</span> {t('and click the')} <span className="text-green-600 dark:text-green-400 font-semibold">{t('Match Scout')}</span> {t('or')} <span className="text-blue-600 dark:text-blue-400 font-semibold">{t('Pit Scout')}</span> {t('button to create your first scout report')}
                     </p>
                   )}
                 </div>
@@ -408,10 +409,10 @@ export default function DashboardPage() {
                         </div>
                         <div>
                           <p className="font-medium text-gray-900 dark:text-white">
-                            {activity.type === 'match' ? 'Match Scout' : 'Pit Scout'} - Team {activity.teamNumber}
+                            {activity.type === 'match' ? t('Match Scout') : t('Pit Scout')} {t('- Team')} {activity.teamNumber}
                           </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {activity.matchNumber && `Match ${activity.matchNumber} • `}
+                            {activity.matchNumber && `${t('Match')} ${activity.matchNumber} • `}
                             {new Date(activity.createdAt).toLocaleDateString('en-US', {
                               month: 'short',
                               day: 'numeric',
@@ -425,7 +426,7 @@ export default function DashboardPage() {
                         ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
                         : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
                         }`}>
-                        {activity.type === 'match' ? 'Match' : 'Pit'}
+                        {activity.type === 'match' ? t('Match') : t('Pit')}
                       </div>
                     </div>
                   ))}
@@ -435,7 +436,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
-
       {/* Edit Event Modal */}
       {currentEvent && (
         <EditEventModal
@@ -450,7 +450,6 @@ export default function DashboardPage() {
           }}
         />
       )}
-
       {/* Share Event Modal */}
       {currentEvent && (
         <ShareEventModal
@@ -460,6 +459,6 @@ export default function DashboardPage() {
           onUpdate={refreshEvents}
         />
       )}
-    </div>
+    </div>)
   );
 }

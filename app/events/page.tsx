@@ -1,11 +1,14 @@
 'use client';
 
+import { createT } from '@/lib/simple-i18n';
+const t = createT('events/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { CreateEventModal } from '@/components/CreateEventModal';
 import ShareEventModal from '@/components/ShareEventModal';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import type { Event } from '@/lib/events';
 import { deleteEvent } from '@/lib/events';
 
@@ -33,7 +36,7 @@ export default function EventsPage() {
   };
 
   const handleDeleteEvent = async (event: Event) => {
-    const confirmMessage = `Are you sure you want to delete "${event.name}"?\n\nThis will permanently delete:\n• All match scouts\n• All pit scouts and images\n• All checklists\n• The event itself\n\nThis action cannot be undone.`;
+    const confirmMessage = `${t('Are you sure you want to delete')} "${event.name}"?\n\n${t('This will permanently delete')}:\n• ${t('All match scouts')}\n• ${t('All pit scouts and images')}\n• ${t('All checklists')}\n• ${t('The event itself')}\n\n${t('This action cannot be undone')}.`;
 
     if (!window.confirm(confirmMessage)) {
       return;
@@ -52,10 +55,10 @@ export default function EventsPage() {
       // Refresh the events list
       await refreshEvents();
 
-      alert('Event and all associated data deleted successfully!');
+      alert(t('Event and all associated data deleted successfully!'));
     } catch (error) {
-      console.error('Error deleting event:', error);
-      alert('Failed to delete event. Please try again.');
+      console.error(t('Error deleting event:'), error);
+      alert(t('Failed to delete event. Please try again.'));
     } finally {
       setDeletingEventId(null);
     }
@@ -67,14 +70,14 @@ export default function EventsPage() {
   };
 
   const getUserInitial = () => {
-    return user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U';
+    return user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || t('U');
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-amber-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
-        <div className="text-lg text-gray-600 dark:text-gray-400">Loading...</div>
-      </div>
+      (<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-amber-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+        <div className="text-lg text-gray-600 dark:text-gray-400">{t('Loading...')}</div>
+      </div>)
     );
   }
 
@@ -83,7 +86,7 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-amber-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+    (<div className="min-h-screen bg-gradient-to-br from-blue-50 via-amber-50 to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Header with Profile */}
       <header className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -94,85 +97,87 @@ export default function EventsPage() {
                 <div className="absolute bg-gradient-to-r from-blue-600 to-amber-500 rounded-lg blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
                 <img
                   src="/logo.png"
-                  alt="FTC Live Scout"
+                  alt={t('FTC Live Scout')}
                   className="relative h-12 w-auto sm:h-15 rounded-lg shadow-lg group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
             </div>
 
-            {/* Profile Section */}
-            <div className="relative">
-              <button
-                onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                <div className="text-right hidden sm:block">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{user.name || 'User'}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
-                </div>
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 via-amber-600 to-blue-600 flex items-center justify-center text-white font-bold shadow-md">
-                  {getUserInitial()}
-                </div>
-              </button>
+            {/* Language Switcher & Profile Section */}
+            <div className="flex items-center gap-3">
+              <LanguageSwitcher />
+              <div className="relative">
+                <button
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <div className="text-right hidden sm:block">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">{user.name || t('User')}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
+                  </div>
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 via-amber-600 to-blue-600 flex items-center justify-center text-white font-bold shadow-md">
+                    {getUserInitial()}
+                  </div>
+                </button>
 
-              {/* Profile Dropdown */}
-              {showProfileMenu && (
-                <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                    <p className="font-semibold text-gray-900 dark:text-white">{user.name || 'User'}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
+                {/* Profile Dropdown */}
+                {showProfileMenu && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                      <p className="font-semibold text-gray-900 dark:text-white">{user.name || t('User')}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
+                    </div>
+                    <div className="p-2">
+                      <button
+                        onClick={() => {
+                          setShowProfileMenu(false);
+                          router.push('/profile');
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        {t('Account Settings')}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowProfileMenu(false);
+                          router.push('/about');
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        {t('About')}
+                      </button>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        {t('Sign Out')}
+                      </button>
+                    </div>
                   </div>
-                  <div className="p-2">
-                    <button
-                      onClick={() => {
-                        setShowProfileMenu(false);
-                        router.push('/profile');
-                      }}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                      Account Settings
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowProfileMenu(false);
-                        router.push('/about');
-                      }}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      About
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                      </svg>
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
       </header>
-
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24 lg:pb-8">
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Your Events
+            {t('Your Events')}
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
-            Select an event to start scouting, or create a new one
+            {t('Select an event to start scouting, or create a new one')}
           </p>
         </div>
 
@@ -184,8 +189,8 @@ export default function EventsPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No events yet</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">Create your first event to start scouting</p>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{t('No events yet')}</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">{t('Create your first event to start scouting')}</p>
             <button
               onClick={() => setIsCreateModalOpen(true)}
               className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
@@ -193,7 +198,7 @@ export default function EventsPage() {
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Create Event
+              {t('Create Event')}
             </button>
           </div>
         ) : (
@@ -208,7 +213,7 @@ export default function EventsPage() {
                   {currentEvent?.$id === event.$id && (
                     <div className={`absolute top-4 ${event.userId === user?.$id ? 'left-4' : 'right-4'}`}>
                       <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full">
-                        Active
+                        {t('Active')}
                       </span>
                     </div>
                   )}
@@ -222,7 +227,7 @@ export default function EventsPage() {
                           setShareEventModal(event);
                         }}
                         className="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
-                        title="Share event"
+                        title={t('Share event')}
                       >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -235,7 +240,7 @@ export default function EventsPage() {
                         }}
                         disabled={deletingEventId === event.$id}
                         className="p-2 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="Delete event and all data"
+                        title={t('Delete event and all data')}
                       >
                         {deletingEventId === event.$id ? (
                           <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -285,7 +290,7 @@ export default function EventsPage() {
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
-                        <span>Shared with {event.sharedWith.length} {event.sharedWith.length === 1 ? 'person' : 'people'}</span>
+                        <span>{t('Shared with')} {event.sharedWith.length} {event.sharedWith.length === 1 ? 'person' : 'people'}</span>
                       </div>
                     )}
 
@@ -295,7 +300,7 @@ export default function EventsPage() {
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
-                        <span>Shared event</span>
+                        <span>{t('Shared event')}</span>
                       </div>
                     )}
 
@@ -323,23 +328,21 @@ export default function EventsPage() {
 
                 {/* Card Info */}
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  Create New Event
+                  {t('Create New Event')}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Add a new competition or tournament
+                  {t('Add a new competition or tournament')}
                 </p>
               </button>
             </div>
           </>
         )}
       </main>
-
       {/* Create Event Modal */}
       <CreateEventModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
       />
-
       {/* Share Event Modal */}
       {shareEventModal && (
         <ShareEventModal
@@ -349,6 +352,6 @@ export default function EventsPage() {
           onUpdate={refreshEvents}
         />
       )}
-    </div>
+    </div>)
   );
 }

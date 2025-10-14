@@ -1,5 +1,7 @@
 'use client';
 
+import { createT } from '@/lib/simple-i18n';
+const t = createT('matches/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -38,7 +40,7 @@ export default function MatchesPage() {
       const data = await getMatchScouts(currentEvent.$id);
       setMatches(data);
     } catch (error) {
-      console.error('Error loading matches:', error);
+      console.error(t('Error loading matches:'), error);
     } finally {
       setLoadingData(false);
     }
@@ -55,16 +57,15 @@ export default function MatchesPage() {
 
   if (loading || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
-      </div>
+      (<div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">{t('Loading...')}</div>
+      </div>)
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    (<div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navigation />
-
       {/* Main Content */}
       <main className="lg:pl-64 pb-20 lg:pb-8">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -78,7 +79,7 @@ export default function MatchesPage() {
               <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Dashboard
+              {t('Dashboard')}
             </button>
 
             {/* Mobile Header Bar */}
@@ -94,7 +95,7 @@ export default function MatchesPage() {
                 </button>
                 <div className="ml-3 flex-1">
                   <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    Match Scouts
+                    {t('Match Scouts')}
                   </h1>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
                     {matches.length} {matches.length === 1 ? 'record' : 'records'}
@@ -111,7 +112,7 @@ export default function MatchesPage() {
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                    Match Scouts
+                    {t('Match Scouts')}
                   </h1>
                   <p className="text-gray-600 dark:text-gray-400">
                     {matches.length} {matches.length === 1 ? 'record' : 'records'} from {currentEvent?.name}
@@ -132,7 +133,7 @@ export default function MatchesPage() {
               </svg>
               <input
                 type="text"
-                placeholder="Search by team, match, or alliance..."
+                placeholder={t('Search by team, match, or alliance...')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -144,7 +145,7 @@ export default function MatchesPage() {
           {loadingData ? (
             <div className="text-center py-12">
               <div className="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-              <p className="mt-4 text-gray-600 dark:text-gray-400">Loading matches...</p>
+              <p className="mt-4 text-gray-600 dark:text-gray-400">{t('Loading matches...')}</p>
             </div>
           ) : filteredMatches.length === 0 ? (
             <div className="text-center py-12 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
@@ -152,10 +153,10 @@ export default function MatchesPage() {
                 <span className="text-4xl">🏁</span>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                {searchQuery ? 'No matches found' : 'No match scouts yet'}
+                {searchQuery ? t('No matches found') : t('No match scouts yet')}
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                {searchQuery ? 'Try a different search term' : 'Click the + button to add your first match scout'}
+                {searchQuery ? t('Try a different search term') : t('Click the + button to add your first match scout')}
               </p>
             </div>
           ) : (
@@ -176,10 +177,10 @@ export default function MatchesPage() {
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                          Team {match.teamNumber}
+                          {t('Team')} {match.teamNumber}
                         </h3>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          Match {match.matchNumber} • {match.alliance === 'red' ? 'Red' : 'Blue'} Alliance
+                          {t('Match')} {match.matchNumber} • {match.alliance === 'red' ? t('Red') : t('Blue')} {t('Alliance')}
                           {match.randomization && (
                             <span className="ml-2 px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded text-xs font-semibold">
                               {match.randomization}
@@ -200,19 +201,19 @@ export default function MatchesPage() {
                   {/* AUTO Section */}
                   <div className="mb-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
                     <h4 className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-2 flex items-center gap-1">
-                      <span>🤖</span> AUTO Period
+                      <span>🤖</span> {t('AUTO Period')}
                     </h4>
                     <div className="grid grid-cols-3 gap-2 text-xs">
                       <div className="text-center">
-                        <div className="text-gray-600 dark:text-gray-400">Overflow</div>
+                        <div className="text-gray-600 dark:text-gray-400">{t('Overflow')}</div>
                         <div className="font-bold text-gray-900 dark:text-white">{match.overflowArtifactsAuto || 0}</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-gray-600 dark:text-gray-400">Classified</div>
+                        <div className="text-gray-600 dark:text-gray-400">{t('Classified')}</div>
                         <div className="font-bold text-gray-900 dark:text-white">{match.classifiedArtifactsAuto || 0}</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-gray-600 dark:text-gray-400">Leave</div>
+                        <div className="text-gray-600 dark:text-gray-400">{t('Leave')}</div>
                         <div className="font-bold text-gray-900 dark:text-white">
                           {match.robotLeave ? '✓' : '-'}
                         </div>
@@ -223,26 +224,26 @@ export default function MatchesPage() {
                   {/* TELEOP Section */}
                   <div className="mb-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
                     <h4 className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-2 flex items-center gap-1">
-                      <span>🎮</span> TELEOP Period
+                      <span>🎮</span> {t('TELEOP Period')}
                     </h4>
                     <div className="grid grid-cols-4 gap-2 text-xs">
                       <div className="text-center">
-                        <div className="text-gray-600 dark:text-gray-400">Depot</div>
+                        <div className="text-gray-600 dark:text-gray-400">{t('Depot')}</div>
                         <div className="font-bold text-gray-900 dark:text-white">{match.depotArtifacts || 0}</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-gray-600 dark:text-gray-400">Overflow</div>
+                        <div className="text-gray-600 dark:text-gray-400">{t('Overflow')}</div>
                         <div className="font-bold text-gray-900 dark:text-white">{match.overflowArtifactsTeleop || 0}</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-gray-600 dark:text-gray-400">Classified</div>
+                        <div className="text-gray-600 dark:text-gray-400">{t('Classified')}</div>
                         <div className="font-bold text-gray-900 dark:text-white">{match.classifiedArtifactsTeleop || 0}</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-gray-600 dark:text-gray-400">Base</div>
+                        <div className="text-gray-600 dark:text-gray-400">{t('Base')}</div>
                         <div className="font-bold text-xs text-gray-900 dark:text-white">
-                          {match.robotBase === 'FULL' ? 'Full' :
-                            match.robotBase === 'PARTIAL' ? 'Partial' : '-'}
+                          {match.robotBase === 'FULL' ? t('Full') :
+                            match.robotBase === 'PARTIAL' ? t('Partial') : '-'}
                         </div>
                       </div>
                     </div>
@@ -256,19 +257,19 @@ export default function MatchesPage() {
                       </h4>
                       <div className="grid grid-cols-3 gap-2">
                         <div className="text-center bg-white dark:bg-gray-900 rounded p-2">
-                          <div className="text-xs text-gray-600 dark:text-gray-400">Auto</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400">{t('Auto')}</div>
                           <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
                             {match.autoScore ?? 0}
                           </div>
                         </div>
                         <div className="text-center bg-white dark:bg-gray-900 rounded p-2">
-                          <div className="text-xs text-gray-600 dark:text-gray-400">Teleop</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400">{t('Teleop')}</div>
                           <div className="text-lg font-bold text-green-600 dark:text-green-400">
                             {match.teleopScore ?? 0}
                           </div>
                         </div>
                         <div className="text-center bg-gradient-to-br from-blue-500 to-amber-600 dark:from-blue-600 dark:to-amber-700 rounded p-2">
-                          <div className="text-xs text-white/80">Total</div>
+                          <div className="text-xs text-white/80">{t('Total')}</div>
                           <div className="text-lg font-bold text-white">
                             {match.totalScore ?? 0}
                           </div>
@@ -280,7 +281,7 @@ export default function MatchesPage() {
                   <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                     <div className="flex items-center gap-1">
                       <span>⚠️</span>
-                      <span>{(match.minorFouls || 0) + (match.majorFouls || 0)} Fouls ({match.minorFouls || 0}m / {match.majorFouls || 0}M)</span>
+                      <span>{(match.minorFouls || 0) + (match.majorFouls || 0)} {t('Fouls')} ({match.minorFouls || 0}m / {match.majorFouls || 0}M)</span>
                     </div>
                     <div className="flex-1 text-right text-xs">
                       {new Date(match.$createdAt).toLocaleDateString()}
@@ -293,7 +294,7 @@ export default function MatchesPage() {
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         {match.lastEditedByName ? (
                           <>
-                            <span className="font-medium">Last edited by:</span> {match.lastEditedByName}
+                            <span className="font-medium">{t('Last edited by:')}</span> {match.lastEditedByName}
                             {match.lastEditedAt && (
                               <span className="ml-2">
                                 {new Date(match.lastEditedAt).toLocaleString()}
@@ -302,7 +303,7 @@ export default function MatchesPage() {
                           </>
                         ) : (
                           <>
-                            <span className="font-medium">Created by:</span> {match.createdByName}
+                            <span className="font-medium">{t('Created by:')}</span> {match.createdByName}
                           </>
                         )}
                       </p>
@@ -322,7 +323,6 @@ export default function MatchesPage() {
           )}
         </div>
       </main>
-
       {/* Floating Add Button - Only show if user can edit */}
       {currentEvent && canEditData(currentEvent, user.$id) && (
         <button
@@ -334,6 +334,6 @@ export default function MatchesPage() {
           </svg>
         </button>
       )}
-    </div>
+    </div>)
   );
 }

@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useEvent } from '@/context/EventContext';
+import { createT } from '@/lib/simple-i18n';
+
+const t = createT('components/EditEventModal');
 
 interface EditEventModalProps {
   isOpen: boolean;
@@ -38,12 +41,12 @@ export function EditEventModal({ isOpen, onClose, eventId, initialData }: EditEv
     e.preventDefault();
 
     if (!name.trim() || !location.trim() || !startDate || !endDate) {
-      setError('Please fill in all fields');
+      setError(t('Please fill in all fields'));
       return;
     }
 
     if (new Date(endDate) < new Date(startDate)) {
-      setError('End date must be after start date');
+      setError(t('End date must be after start date'));
       return;
     }
 
@@ -58,7 +61,7 @@ export function EditEventModal({ isOpen, onClose, eventId, initialData }: EditEv
       });
       onClose();
     } catch (err) {
-      setError('Failed to update event. Please try again.');
+      setError(t('Failed to update event. Please try again.'));
       console.error(err);
     } finally {
       setLoading(false);
@@ -71,7 +74,7 @@ export function EditEventModal({ isOpen, onClose, eventId, initialData }: EditEv
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4 flex items-center justify-between rounded-t-2xl">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Edit Event</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('Edit Event')}</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -91,13 +94,13 @@ export function EditEventModal({ isOpen, onClose, eventId, initialData }: EditEv
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Event Name
+              {t('Event Name')}
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g., Regional Championship 2024"
+              placeholder={t('e.g., Regional Championship 2024')}
               className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               required
             />
@@ -105,13 +108,13 @@ export function EditEventModal({ isOpen, onClose, eventId, initialData }: EditEv
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Location
+              {t('Location')}
             </label>
             <input
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="e.g., San Francisco, CA"
+              placeholder={t('e.g., San Francisco, CA')}
               className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               required
             />
@@ -120,7 +123,7 @@ export function EditEventModal({ isOpen, onClose, eventId, initialData }: EditEv
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Start Date
+                {t('Start Date')}
               </label>
               <input
                 type="date"
@@ -132,7 +135,7 @@ export function EditEventModal({ isOpen, onClose, eventId, initialData }: EditEv
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                End Date
+                {t('End Date')}
               </label>
               <input
                 type="date"
@@ -151,14 +154,14 @@ export function EditEventModal({ isOpen, onClose, eventId, initialData }: EditEv
               disabled={loading}
               className="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Cancel
+              {t('Cancel')}
             </button>
             <button
               type="submit"
               disabled={loading}
               className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-amber-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-amber-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
             >
-              {loading ? 'Saving...' : 'Save Changes'}
+              {loading ? t('Saving...') : t('Save Changes')}
             </button>
           </div>
         </form>

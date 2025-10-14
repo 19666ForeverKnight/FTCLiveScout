@@ -1,5 +1,7 @@
 'use client';
 
+import { createT } from '@/lib/simple-i18n';
+const t = createT('signup/page')
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -21,13 +23,13 @@ export default function SignupPage() {
     setLoading(true);
 
     if (password.length < 8) {
-      setError('Password must be at least 8 characters long.');
+      setError(t('Password must be at least 8 characters long.'));
       setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match. Please make sure both passwords are identical.');
+      setError(t('Passwords do not match. Please make sure both passwords are identical.'));
       setLoading(false);
       return;
     }
@@ -37,9 +39,9 @@ export default function SignupPage() {
       router.push('/user-agreement');
     } catch (err: any) {
       if (err?.message?.includes('already exists')) {
-        setError('An account with this email already exists.');
+        setError(t('An account with this email already exists.'));
       } else {
-        setError('Failed to create account. Please try again.');
+        setError(t('Failed to create account. Please try again.'));
       }
       console.error(err);
     } finally {
@@ -48,18 +50,18 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-amber-50/30 dark:from-gray-950 dark:via-blue-950/20 dark:to-amber-950/20 flex items-center justify-center px-4 py-12">
+    (<div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-amber-50/30 dark:from-gray-950 dark:via-blue-950/20 dark:to-amber-950/20 flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
         {/* Logo/Icon */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center mb-4">
-            <img src="/logo.png" alt="FTC Live Scout" className="w-20 h-20 rounded-3xl shadow-xl" />
+            <img src="/logo.png" alt={t('FTC Live Scout')} className="w-20 h-20 rounded-3xl shadow-xl" />
           </div>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-amber-600 dark:from-blue-400 dark:to-amber-400 bg-clip-text text-transparent mb-2">
-            Join FTC Live Scout
+            {t('Join FTC Live Scout')}
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Create your account to get started
+            {t('Create your account to get started')}
           </p>
         </div>
 
@@ -69,7 +71,7 @@ export default function SignupPage() {
             {/* Name Field */}
             <div className="group">
               <label htmlFor="name" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Full Name
+                {t('Full Name')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -84,7 +86,7 @@ export default function SignupPage() {
                   autoComplete="name"
                   required
                   className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600"
-                  placeholder="John Doe"
+                  placeholder={t('John Doe')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -94,7 +96,7 @@ export default function SignupPage() {
             {/* Email Field */}
             <div className="group">
               <label htmlFor="email" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Email Address
+                {t('Email Address')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -119,7 +121,7 @@ export default function SignupPage() {
             {/* Password Field */}
             <div className="group">
               <label htmlFor="password" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Password
+                {t('Password')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -134,7 +136,7 @@ export default function SignupPage() {
                   autoComplete="new-password"
                   required
                   className="w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600"
-                  placeholder="Minimum 8 characters"
+                  placeholder={t('Minimum 8 characters')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -143,14 +145,14 @@ export default function SignupPage() {
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Password must be at least 8 characters long
+                {t('Password must be at least 8 characters long')}
               </p>
             </div>
 
             {/* Confirm Password Field */}
             <div className="group">
               <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Confirm Password
+                {t('Confirm Password')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -165,10 +167,10 @@ export default function SignupPage() {
                   autoComplete="new-password"
                   required
                   className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600 ${confirmPassword && password !== confirmPassword
-                      ? 'border-red-300 dark:border-red-700'
-                      : 'border-gray-200 dark:border-gray-700'
+                    ? 'border-red-300 dark:border-red-700'
+                    : 'border-gray-200 dark:border-gray-700'
                     }`}
-                  placeholder="Re-enter your password"
+                  placeholder={t('Re-enter your password')}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
@@ -178,7 +180,7 @@ export default function SignupPage() {
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  Passwords do not match
+                  {t('Passwords do not match')}
                 </p>
               )}
               {confirmPassword && password === confirmPassword && (
@@ -186,7 +188,7 @@ export default function SignupPage() {
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  Passwords match
+                  {t('Passwords match')}
                 </p>
               )}
             </div>
@@ -217,14 +219,14 @@ export default function SignupPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Creating account...
+                  {t('Creating account...')}
                 </>
               ) : (
                 <>
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                   </svg>
-                  Create Account
+                  {t('Create Account')}
                 </>
               )}
             </button>
@@ -236,7 +238,7 @@ export default function SignupPage() {
               <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white/70 dark:bg-gray-900/70 text-gray-500 dark:text-gray-400">Already have an account?</span>
+              <span className="px-4 bg-white/70 dark:bg-gray-900/70 text-gray-500 dark:text-gray-400">{t('Already have an account?')}</span>
             </div>
           </div>
 
@@ -248,10 +250,10 @@ export default function SignupPage() {
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
             </svg>
-            Sign In Instead
+            {t('Sign In Instead')}
           </Link>
         </div>
       </div>
-    </div>
+    </div>)
   );
 }

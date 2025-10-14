@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { Event, shareEvent, unshareEvent, getEvent, UserRole, getUserRole, updateUserRole } from '@/lib/events';
+import { createT } from '@/lib/simple-i18n';
+
+const t = createT('components/ShareEventModal');
 
 interface ShareEventModalProps {
   event: Event;
@@ -11,12 +14,12 @@ interface ShareEventModalProps {
 }
 
 const ROLE_DESCRIPTIONS: Record<UserRole, string> = {
-  admin: 'Full access: manage event, share with others, edit/delete all data',
-  scouter: 'Can create and edit match/pit scouts',
-  driver: 'Can create and edit match/pit scouts',
-  engineer: 'Can create and edit match/pit scouts',
-  technician: 'Can create and edit match/pit scouts',
-  viewer: 'View only: cannot make any changes to data',
+  admin: t('Full access: manage event, share with others, edit/delete all data'),
+  scouter: t('Can create and edit match/pit scouts'),
+  driver: t('Can create and edit match/pit scouts'),
+  engineer: t('Can create and edit match/pit scouts'),
+  technician: t('Can create and edit match/pit scouts'),
+  viewer: t('View only: cannot make any changes to data'),
 };
 
 const ROLE_ICONS: Record<UserRole, string> = {
@@ -57,7 +60,7 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
 
   const handleShare = async () => {
     if (!userId.trim() || !userName.trim()) {
-      setError('Please enter both user ID and name');
+      setError(t('Please enter both user ID and name'));
       return;
     }
 
@@ -67,7 +70,7 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
 
     try {
       await shareEvent(event.$id, userId.trim(), userName.trim(), selectedRole);
-      setSuccess(`Event shared successfully with ${selectedRole} role!`);
+      setSuccess(`${t('Event shared successfully with')} ${selectedRole} ${t('role')}!`);
       setUserId('');
       setUserName('');
       setSelectedRole('scouter');
@@ -76,7 +79,7 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
-      setError(err.message || 'Failed to share event');
+      setError(err.message || t('Failed to share event'));
     } finally {
       setIsSharing(false);
     }
@@ -88,13 +91,13 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
 
     try {
       await updateUserRole(event.$id, targetUserId, newRole);
-      setSuccess('Role updated successfully!');
+      setSuccess(t('Role updated successfully!'));
       setEditingRoleForUser(null);
       await refreshEventData();
 
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
-      setError(err.message || 'Failed to update role');
+      setError(err.message || t('Failed to update role'));
     }
   };
 
@@ -104,13 +107,13 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
 
     try {
       await unshareEvent(event.$id, targetUserId);
-      setSuccess('Access removed successfully!');
+      setSuccess(t('Access removed successfully!'));
       await refreshEventData();
 
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
-      setError(err.message || 'Failed to remove access');
+      setError(err.message || t('Failed to remove access'));
     }
   };
 
@@ -124,13 +127,13 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
         <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-amber-500 text-white p-6 rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold">Share Event</h2>
+              <h2 className="text-2xl font-bold">{t('Share Event')}</h2>
               <p className="text-blue-50 mt-1">{currentEvent.name}</p>
             </div>
             <button
               onClick={onClose}
               className="text-white hover:bg-white/20 rounded-full p-2 transition-colors"
-              title="Close"
+              title={t('Close')}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -143,28 +146,28 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
           {/* Share Form */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Share with User
+              {t('Share with User')}
             </label>
             <div className="space-y-3">
               <input
                 type="text"
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
-                placeholder="Enter User ID"
+                placeholder={t('Enter User ID')}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <input
                 type="text"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
-                placeholder="Enter User Name"
+                placeholder={t('Enter User Name')}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
 
               {/* Role Selection */}
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">
-                  Select Role
+                  {t('Select Role')}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {(Object.keys(ROLE_DESCRIPTIONS) as UserRole[]).map((role) => (
@@ -195,14 +198,13 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
                 disabled={isSharing}
                 className="w-full bg-gradient-to-r from-blue-600 to-amber-500 text-white py-3 rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
               >
-                {isSharing ? 'Sharing...' : `Share Event as ${selectedRole}`}
+                {isSharing ? t('Sharing...') : `${t('Share Event as')} ${selectedRole}`}
               </button>
             </div>
 
             <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
               <p className="text-xs text-blue-800 dark:text-blue-300">
-                <strong>Note:</strong> To share an event, you need the other user's User ID.
-                Users can find their ID in their profile page.
+                <strong>{t('Note')}:</strong> {t('To share an event, you need the other user\'s User ID. Users can find their ID in their profile page.')}
               </p>
             </div>
           </div>
@@ -223,7 +225,7 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
           {/* Collaborators List */}
           <div>
             <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-              Shared With ({collaborators.length})
+              {t('Shared With')} ({collaborators.length})
             </h3>
 
             {collaborators.length === 0 ? (
@@ -231,7 +233,7 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
                 <svg className="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <p className="text-sm">No collaborators yet</p>
+                <p className="text-sm">{t('No collaborators yet')}</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -244,14 +246,14 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
                       key={colabUserId}
                       className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     >
-                      <div className="flex items-start justify-between">
+                        <div className="flex items-start justify-between">
                         <div className="flex items-center space-x-3 flex-1">
                           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-amber-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
                             {collaboratorNames[index]?.charAt(0).toUpperCase() || '?'}
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-semibold text-gray-900 dark:text-white truncate">
-                              {collaboratorNames[index] || 'Unknown User'}
+                              {collaboratorNames[index] || t('Unknown User')}
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{colabUserId}</p>
 
@@ -290,7 +292,7 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
                             <button
                               onClick={() => setEditingRoleForUser(null)}
                               className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 p-1"
-                              title="Cancel"
+                              title={t('Cancel')}
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -300,9 +302,9 @@ export default function ShareEventModal({ event, isOpen, onClose, onUpdate }: Sh
                           <button
                             onClick={() => handleUnshare(colabUserId)}
                             className="text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 px-2 py-1 rounded transition-colors text-sm font-medium"
-                            title="Remove access"
+                            title={t('Remove access')}
                           >
-                            Remove
+                            {t('Remove')}
                           </button>
                         </div>
                       </div>

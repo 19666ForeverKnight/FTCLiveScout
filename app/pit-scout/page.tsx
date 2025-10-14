@@ -1,5 +1,7 @@
 'use client';
 
+import { createT } from '@/lib/simple-i18n';
+const t = createT('pit-scout/page')
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -51,7 +53,7 @@ function PitScoutForm() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!lightboxOpen) return;
 
-      if (e.key === 'Escape') {
+      if (e.key === t('Escape')) {
         setLightboxOpen(false);
       } else if (e.key === 'ArrowLeft' && lightboxIndex > 0) {
         setLightboxIndex(lightboxIndex - 1);
@@ -69,9 +71,9 @@ function PitScoutForm() {
     const loadPitScout = async () => {
       if (editId && user) {
         try {
-          console.log('Loading pit scout:', editId);
+          console.log(t('Loading pit scout:'), editId);
           const pit = await getPitScout(editId);
-          console.log('Loaded pit scout:', pit);
+          console.log(t('Loaded pit scout:'), pit);
 
           setFormData({
             teamNumber: pit.teamNumber,
@@ -103,7 +105,7 @@ function PitScoutForm() {
 
             if (validIds.length > 0) {
               ids.push(...validIds);
-              console.log('Valid image IDs:', validIds);
+              console.log(t('Valid image IDs:'), validIds);
 
               // Generate preview URLs only for valid IDs
               validIds.forEach(id => {
@@ -111,15 +113,15 @@ function PitScoutForm() {
                 previews.push(imageUrl);
               });
             } else {
-              console.log('No valid image IDs found');
+              console.log(t('No valid image IDs found'));
             }
           }
 
           setExistingImageIds(ids);
           setImagePreviews(previews);
         } catch (err: any) {
-          console.error('Error loading pit scout:', err);
-          setError('Failed to load pit scout: ' + (err.message || 'Unknown error'));
+          console.error(t('Error loading pit scout:'), err);
+          setError(t('Failed to load pit scout: ') + (err.message || t('Unknown error')));
           // If pit scout doesn't exist, redirect back to pits page
           if (err.code === 404 || err.message?.includes('not found')) {
             setTimeout(() => router.push('/pits'), 2000);
@@ -141,13 +143,13 @@ function PitScoutForm() {
     Array.from(files).forEach(file => {
       // Validate file type
       if (!file.type.startsWith('image/')) {
-        setError('Please select only image files');
+        setError(t('Please select only image files'));
         hasError = true;
         return;
       }
       // Validate file size (5MB max)
       if (file.size > 5000000) {
-        setError('Each image must be smaller than 5MB');
+        setError(t('Each image must be smaller than 5MB'));
         hasError = true;
         return;
       }
@@ -192,11 +194,15 @@ function PitScoutForm() {
 
     // Check if user has permission to delete data
     if (!canEditData(currentEvent, user.$id)) {
-      setError('You do not have permission to delete pit scouts. Your role is set to Viewer.');
+      setError(t(
+        'You do not have permission to delete pit scouts. Your role is set to Viewer.'
+      ));
       return;
     }
 
-    const confirmed = confirm('Are you sure you want to delete this pit scout? This action cannot be undone.');
+    const confirmed = confirm(t(
+      'Are you sure you want to delete this pit scout? This action cannot be undone.'
+    ));
     if (!confirmed) return;
 
     try {
@@ -218,7 +224,7 @@ function PitScoutForm() {
         try {
           await storage.deleteFile('pit_scout_images', imageId);
         } catch (imgError) {
-          console.error('Failed to delete image:', imgError);
+          console.error(t('Failed to delete image:'), imgError);
           // Continue with other deletions even if one fails
         }
       }
@@ -229,7 +235,7 @@ function PitScoutForm() {
       // Redirect to pits page
       router.push('/pits');
     } catch (err: any) {
-      setError('Failed to delete pit scout: ' + err.message);
+      setError(t('Failed to delete pit scout: ') + err.message);
     } finally {
       setDeleting(false);
     }
@@ -239,18 +245,20 @@ function PitScoutForm() {
     e.preventDefault();
 
     if (!currentEvent) {
-      setError('Please select an event first');
+      setError(t('Please select an event first'));
       return;
     }
 
     if (!user) {
-      setError('You must be logged in');
+      setError(t('You must be logged in'));
       return;
     }
 
     // Check if user has permission to edit data
     if (!canEditData(currentEvent, user.$id)) {
-      setError('You do not have permission to create or edit pit scouts. Your role is set to Viewer.');
+      setError(t(
+        'You do not have permission to create or edit pit scouts. Your role is set to Viewer.'
+      ));
       return;
     }
 
@@ -265,7 +273,7 @@ function PitScoutForm() {
           try {
             await storage.deleteFile('pit_scout_images', imageId);
           } catch (deleteError) {
-            console.error('Failed to delete image:', deleteError);
+            console.error(t('Failed to delete image:'), deleteError);
             // Continue even if deletion fails
           }
         }
@@ -283,7 +291,7 @@ function PitScoutForm() {
             allImageIds.push(fileId);
           }
         } catch (uploadError: any) {
-          setError('Failed to upload images: ' + uploadError.message);
+          setError(t('Failed to upload images: ') + uploadError.message);
           setSubmitting(false);
           setUploading(false);
           return;
@@ -330,7 +338,7 @@ function PitScoutForm() {
         router.push('/pits');
       }, 1500);
     } catch (err: any) {
-      setError(err.message || 'Failed to submit pit scout');
+      setError(err.message || t('Failed to submit pit scout'));
     } finally {
       setSubmitting(false);
     }
@@ -338,9 +346,9 @@ function PitScoutForm() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
-      </div>
+      (<div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">{t('Loading...')}</div>
+      </div>)
     );
   }
 
@@ -351,9 +359,8 @@ function PitScoutForm() {
   const userCanEdit = currentEvent ? canEditData(currentEvent, user.$id) : true;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-amber-50/30 dark:from-gray-950 dark:via-blue-950/20 dark:to-amber-950/20">
+    (<div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-amber-50/30 dark:from-gray-950 dark:via-blue-950/20 dark:to-amber-950/20">
       <Navigation />
-
       {/* Main Content with proper padding for sidebar and bottom nav */}
       <main className="lg:pl-64 pb-20 lg:pb-8">
         <div className="max-w-5xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -365,7 +372,7 @@ function PitScoutForm() {
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Back to Pits
+            {t('Back to Pits')}
           </button>
 
           {/* Modern Header */}
@@ -378,10 +385,10 @@ function PitScoutForm() {
               </div>
               <div>
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-amber-600 dark:from-blue-400 dark:to-amber-400 bg-clip-text text-transparent">
-                  {editId ? 'Edit Pit Scout' : 'New Pit Scout'}
+                  {editId ? t('Edit Pit Scout') : t('New Pit Scout')}
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  {editId ? 'Update robot specifications and team information' : 'Document robot specifications and team information'}
+                  {editId ? t('Update robot specifications and team information') : t('Document robot specifications and team information')}
                 </p>
               </div>
             </div>
@@ -393,9 +400,11 @@ function PitScoutForm() {
               <div className="flex items-center gap-3">
                 <span className="text-2xl">👁️</span>
                 <div>
-                  <h3 className="font-semibold text-red-900 dark:text-red-100">Viewer Role - Read Only Access</h3>
+                  <h3 className="font-semibold text-red-900 dark:text-red-100">{t('Viewer Role - Read Only Access')}</h3>
                   <p className="text-sm text-red-700 dark:text-red-300">
-                    You have view-only access to this event. Contact the event owner to change your role if you need to create or edit scouts.
+                    {t(
+                      'You have view-only access to this event. Contact the event owner to change your role if you need to create or edit scouts.'
+                    )}
                   </p>
                 </div>
               </div>
@@ -412,7 +421,7 @@ function PitScoutForm() {
                   </svg>
                 </div>
                 <p className="text-amber-800 dark:text-amber-200 font-medium">
-                  Please select an event from the sidebar before creating a scout report
+                  {t('Please select an event from the sidebar before creating a scout report')}
                 </p>
               </div>
             </div>
@@ -431,7 +440,7 @@ function PitScoutForm() {
                         </svg>
                       </div>
                       <p className="text-green-800 dark:text-green-200 font-medium">
-                        {editId ? 'Pit scout updated successfully!' : 'Pit scout submitted successfully!'} Redirecting...
+                        {editId ? t('Pit scout updated successfully!') : t('Pit scout submitted successfully!')} {t('Redirecting...')}
                       </p>
                     </div>
                   </div>
@@ -462,13 +471,13 @@ function PitScoutForm() {
                       </svg>
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                      Team Information
+                      {t('Team Information')}
                     </h2>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="group">
                       <label htmlFor="teamNumber" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Team Number *
+                        {t('Team Number *')}
                       </label>
                       <input
                         type="text"
@@ -491,7 +500,7 @@ function PitScoutForm() {
 
                     <div className="group">
                       <label htmlFor="teamName" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Team Name
+                        {t('Team Name')}
                       </label>
                       <input
                         type="text"
@@ -505,7 +514,7 @@ function PitScoutForm() {
 
                     <div className="group">
                       <label htmlFor="pitNumber" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Pit Number
+                        {t('Pit Number')}
                       </label>
                       <input
                         type="text"
@@ -529,13 +538,13 @@ function PitScoutForm() {
                       </svg>
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                      Robot Specifications
+                      {t('Robot Specifications')}
                     </h2>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="group">
                       <label htmlFor="drivetrainType" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Drivetrain Type
+                        {t('Drivetrain Type')}
                       </label>
                       <select
                         id="drivetrainType"
@@ -543,18 +552,18 @@ function PitScoutForm() {
                         value={formData.drivetrainType}
                         onChange={(e) => setFormData({ ...formData, drivetrainType: e.target.value })}
                       >
-                        <option value="">Select drivetrain type</option>
-                        <option value="mecanum">Mecanum</option>
-                        <option value="tank">Tank</option>
-                        <option value="omni">Omni</option>
-                        <option value="swerve">Swerve</option>
-                        <option value="other">Other</option>
+                        <option value="">{t('Select drivetrain type')}</option>
+                        <option value="mecanum">{t('Mecanum')}</option>
+                        <option value="tank">{t('Tank')}</option>
+                        <option value="omni">{t('Omni')}</option>
+                        <option value="swerve">{t('Swerve')}</option>
+                        <option value="other">{t('Other')}</option>
                       </select>
                     </div>
 
                     <div className="group">
                       <label htmlFor="robotWeight" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Weight (lbs)
+                        {t('Weight (lbs)')}
                       </label>
                       <input
                         type="text"
@@ -575,7 +584,7 @@ function PitScoutForm() {
 
                     <div className="md:col-span-2 group">
                       <label htmlFor="programmingLanguage" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Programming Language
+                        {t('Programming Language')}
                       </label>
                       <select
                         id="programmingLanguage"
@@ -583,23 +592,23 @@ function PitScoutForm() {
                         value={formData.programmingLanguage}
                         onChange={(e) => setFormData({ ...formData, programmingLanguage: e.target.value })}
                       >
-                        <option value="">Select language</option>
-                        <option value="java">Java</option>
-                        <option value="blocks">Blocks</option>
-                        <option value="onbot">OnBot Java</option>
-                        <option value="other">Other</option>
+                        <option value="">{t('Select language')}</option>
+                        <option value="java">{t('Java')}</option>
+                        <option value="blocks">{t('Blocks')}</option>
+                        <option value="onbot">{t('OnBot Java')}</option>
+                        <option value="other">{t('Other')}</option>
                       </select>
                     </div>
 
                     <div className="md:col-span-2 group">
                       <label htmlFor="robotStructure" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        🏗️ Robot Structure Description
+                        {t('🏗️ Robot Structure Description')}
                       </label>
                       <textarea
                         id="robotStructure"
                         rows={4}
                         className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600 resize-none"
-                        placeholder="Describe the robot's structure, design, mechanisms, subsystems, etc..."
+                        placeholder={t('Describe the robot\'s structure, design, mechanisms, subsystems, etc...')}
                         value={formData.robotStructure}
                         onChange={(e) => setFormData({ ...formData, robotStructure: e.target.value })}
                       />
@@ -611,26 +620,26 @@ function PitScoutForm() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="group">
                     <label htmlFor="strengths" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      💪 Strengths
+                      {t('💪 Strengths')}
                     </label>
                     <textarea
                       id="strengths"
                       rows={4}
                       className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:focus:ring-green-400 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600 resize-none"
-                      placeholder="What does this robot do well?"
+                      placeholder={t('What does this robot do well?')}
                       value={formData.strengths}
                       onChange={(e) => setFormData({ ...formData, strengths: e.target.value })}
                     />
                   </div>
                   <div className="group">
                     <label htmlFor="weaknesses" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      ⚠️ Weaknesses
+                      {t('⚠️ Weaknesses')}
                     </label>
                     <textarea
                       id="weaknesses"
                       rows={4}
                       className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 dark:focus:ring-orange-400 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600 resize-none"
-                      placeholder="What are potential areas of concern?"
+                      placeholder={t('What are potential areas of concern?')}
                       value={formData.weaknesses}
                       onChange={(e) => setFormData({ ...formData, weaknesses: e.target.value })}
                     />
@@ -640,13 +649,13 @@ function PitScoutForm() {
                 {/* Additional Notes */}
                 <div className="group">
                   <label htmlFor="notes" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    📝 Additional Notes
+                    {t('📝 Additional Notes')}
                   </label>
                   <textarea
                     id="notes"
                     rows={3}
                     className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600 resize-none"
-                    placeholder="Any other observations or comments..."
+                    placeholder={t('Any other observations or comments...')}
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   />
@@ -661,7 +670,7 @@ function PitScoutForm() {
                       </svg>
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                      Robot Images {imagePreviews.length > 0 && <span className="text-blue-600 dark:text-blue-400">({imagePreviews.length})</span>}
+                      {t('Robot Images')} {imagePreviews.length > 0 && <span className="text-blue-600 dark:text-blue-400">({imagePreviews.length})</span>}
                     </h3>
                   </div>
                   <div className="space-y-3">
@@ -679,13 +688,13 @@ function PitScoutForm() {
                             >
                               <img
                                 src={preview}
-                                alt={`Robot ${index + 1}`}
+                                alt={`${t('Robot')} ${index + 1}`}
                                 className="w-full h-48 object-cover rounded-lg border border-gray-300 dark:border-gray-700 transition-transform duration-200 group-hover:scale-105"
                                 onError={(e) => {
                                   // Replace with placeholder when image fails to load
                                   e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"%3E%3Crect width="200" height="200" fill="%23f3f4f6"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="14" fill="%239ca3af"%3EImage not found%3C/text%3E%3C/svg%3E';
                                   e.currentTarget.onerror = null; // Prevent infinite loop
-                                  console.warn('Failed to load image:', preview);
+                                  console.warn(t('Failed to load image:'), preview);
                                 }}
                               />
                               {/* Zoom indicator */}
@@ -702,7 +711,7 @@ function PitScoutForm() {
                                 handleRemoveImage(index);
                               }}
                               className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition-colors opacity-0 group-hover:opacity-100 z-10"
-                              title="Remove image"
+                              title={t('Remove image')}
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -721,10 +730,10 @@ function PitScoutForm() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                           </svg>
                           <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-                            <span className="font-semibold">Click to upload</span> or drag and drop
+                            <span className="font-semibold">{t('Click to upload')}</span> or drag and drop
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                            Multiple images supported • PNG, JPG, WEBP (MAX. 5MB each)
+                            {t('Multiple images supported • PNG, JPG, WEBP (MAX. 5MB each)')}
                           </p>
                         </div>
                         <input
@@ -744,7 +753,7 @@ function PitScoutForm() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        Uploading images...
+                        {t('Uploading images...')}
                       </div>
                     )}
                   </div>
@@ -756,7 +765,7 @@ function PitScoutForm() {
                     type="submit"
                     disabled={!currentEvent || submitting || uploading || !userCanEdit}
                     className="flex-1 bg-gradient-to-r from-blue-600 to-amber-600 hover:from-blue-700 hover:to-amber-700 text-white font-semibold py-3.5 px-8 rounded-xl shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                    title={!userCanEdit ? 'You do not have permission to edit (Viewer role)' : ''}
+                    title={!userCanEdit ? t('You do not have permission to edit (Viewer role)') : ''}
                   >
                     {submitting ? (
                       <>
@@ -764,14 +773,14 @@ function PitScoutForm() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        {editId ? 'Updating...' : 'Submitting...'}
+                        {editId ? t('Updating...') : t('Submitting...')}
                       </>
                     ) : (
                       <>
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        {editId ? 'Update Report' : 'Submit Report'}
+                        {editId ? t('Update Report') : t('Submit Report')}
                       </>
                     )}
                   </button>
@@ -781,7 +790,7 @@ function PitScoutForm() {
                       onClick={handleDelete}
                       disabled={submitting || deleting || !userCanEdit}
                       className="sm:w-auto bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-semibold py-3.5 px-8 rounded-xl shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                      title={!userCanEdit ? 'You do not have permission to delete (Viewer role)' : ''}
+                      title={!userCanEdit ? t('You do not have permission to delete (Viewer role)') : ''}
                     >
                       {deleting ? (
                         <>
@@ -789,14 +798,14 @@ function PitScoutForm() {
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
-                          Deleting...
+                          {t('Deleting...')}
                         </>
                       ) : (
                         <>
                           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
-                          Delete
+                          {t('Delete')}
                         </>
                       )}
                     </button>
@@ -807,7 +816,6 @@ function PitScoutForm() {
           </div>
         </div>
       </main>
-
       {/* Image Lightbox Modal */}
       {lightboxOpen && (
         <div
@@ -818,7 +826,7 @@ function PitScoutForm() {
           <button
             onClick={() => setLightboxOpen(false)}
             className="absolute top-4 right-4 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors"
-            title="Close"
+            title={t('Close')}
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -833,7 +841,7 @@ function PitScoutForm() {
                 setLightboxIndex(lightboxIndex - 1);
               }}
               className="absolute left-4 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors"
-              title="Previous"
+              title={t('Previous')}
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -845,7 +853,7 @@ function PitScoutForm() {
           <div className="max-w-7xl max-h-[90vh] relative" onClick={(e) => e.stopPropagation()}>
             <img
               src={imagePreviews[lightboxIndex]}
-              alt={`Robot ${lightboxIndex + 1}`}
+              alt={`${t('Robot')} ${lightboxIndex + 1}`}
               className="max-w-full max-h-[90vh] w-auto h-auto object-contain rounded-lg shadow-2xl"
             />
             {/* Image counter */}
@@ -864,7 +872,7 @@ function PitScoutForm() {
                 setLightboxIndex(lightboxIndex + 1);
               }}
               className="absolute right-4 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors"
-              title="Next"
+              title={t('Next')}
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -873,18 +881,18 @@ function PitScoutForm() {
           )}
         </div>
       )}
-    </div>
+    </div>)
   );
 }
 
 export default function PitScoutPage() {
   return (
-    <Suspense fallback={
+    (<Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
+        <div className="text-lg">{t('Loading...')}</div>
       </div>
     }>
       <PitScoutForm />
-    </Suspense>
+    </Suspense>)
   );
 }

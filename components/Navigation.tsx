@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useEvent } from '@/context/EventContext';
 import { useAuth } from '@/context/AuthContext';
 import { getUserRole } from '@/lib/events';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export function Navigation() {
   const pathname = usePathname();
@@ -38,8 +39,8 @@ export function Navigation() {
                 <Link
                   href="/dashboard"
                   className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${isActive('/dashboard')
-                      ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 shadow-sm'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 shadow-sm'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                     }`}
                 >
                   <span className="text-xl mr-3">🏠</span>
@@ -48,8 +49,8 @@ export function Navigation() {
                 <Link
                   href="/matches"
                   className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${isActive('/matches')
-                      ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 shadow-sm'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 shadow-sm'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                     }`}
                 >
                   <span className="text-xl mr-3">🏁</span>
@@ -58,8 +59,8 @@ export function Navigation() {
                 <Link
                   href="/pits"
                   className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${isActive('/pits')
-                      ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 shadow-sm'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 shadow-sm'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                     }`}
                 >
                   <span className="text-xl mr-3">🔧</span>
@@ -68,8 +69,8 @@ export function Navigation() {
                 <Link
                   href="/analytics"
                   className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${isActive('/analytics')
-                      ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 shadow-sm'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 shadow-sm'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                     }`}
                 >
                   <span className="text-xl mr-3">📊</span>
@@ -79,8 +80,8 @@ export function Navigation() {
                   <Link
                     href="/checklists"
                     className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all ${isActive('/checklists')
-                        ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 shadow-sm'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 shadow-sm'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                       }`}
                   >
                     <span className="text-xl mr-3">✅</span>
@@ -91,9 +92,12 @@ export function Navigation() {
             )}
           </nav>
 
-          {/* Version Number */}
+          {/* Language Switcher & Version */}
           <div className="flex-shrink-0 border-t border-gray-200 dark:border-gray-800">
-            <div className="px-4 py-3 text-xs text-gray-500 dark:text-gray-400 text-center">
+            <div className="px-4 py-3">
+              <LanguageSwitcher />
+            </div>
+            <div className="px-4 pb-3 text-xs text-gray-500 dark:text-gray-400 text-center">
               FTC Live Scout v1.0
             </div>
           </div>
@@ -107,8 +111,8 @@ export function Navigation() {
             <Link
               href="/dashboard"
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${isActive('/dashboard')
-                  ? 'text-blue-600 dark:text-blue-400'
-                  : 'text-gray-600 dark:text-gray-400'
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-600 dark:text-gray-400'
                 }`}
             >
               <span className="text-2xl mb-1">🏠</span>
@@ -117,8 +121,8 @@ export function Navigation() {
             <Link
               href="/matches"
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${isActive('/matches')
-                  ? 'text-green-600 dark:text-green-400'
-                  : 'text-gray-600 dark:text-gray-400'
+                ? 'text-green-600 dark:text-green-400'
+                : 'text-gray-600 dark:text-gray-400'
                 }`}
             >
               <span className="text-2xl mb-1">🏁</span>
@@ -127,8 +131,8 @@ export function Navigation() {
             <Link
               href="/pits"
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${isActive('/pits')
-                  ? 'text-blue-600 dark:text-blue-400'
-                  : 'text-gray-600 dark:text-gray-400'
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-600 dark:text-gray-400'
                 }`}
             >
               <span className="text-2xl mb-1">🔧</span>
@@ -137,8 +141,8 @@ export function Navigation() {
             <Link
               href="/analytics"
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${isActive('/analytics')
-                  ? 'text-purple-600 dark:text-purple-400'
-                  : 'text-gray-600 dark:text-gray-400'
+                ? 'text-purple-600 dark:text-purple-400'
+                : 'text-gray-600 dark:text-gray-400'
                 }`}
             >
               <span className="text-2xl mb-1">📊</span>
@@ -148,8 +152,8 @@ export function Navigation() {
               <Link
                 href="/checklists"
                 className={`flex flex-col items-center justify-center flex-1 h-full transition-colors touch-manipulation ${isActive('/checklists')
-                    ? 'text-orange-600 dark:text-orange-400'
-                    : 'text-gray-600 dark:text-gray-400'
+                  ? 'text-orange-600 dark:text-orange-400'
+                  : 'text-gray-600 dark:text-gray-400'
                   }`}
               >
                 <span className="text-2xl mb-1">✅</span>

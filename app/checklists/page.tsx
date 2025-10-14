@@ -1,5 +1,7 @@
 'use client';
 
+import { createT } from '@/lib/simple-i18n';
+const t = createT('checklists/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -90,7 +92,7 @@ export default function ChecklistsPage() {
                 setChecklists([]);
             }
         } catch (error) {
-            console.error('Error loading checklists:', error);
+            console.error(t('Error loading checklists:'), error);
         } finally {
             setLoadingData(false);
         }
@@ -129,8 +131,8 @@ export default function ChecklistsPage() {
         try {
             await updateChecklist(checklistId, updatedItems, user.$id, user.name);
         } catch (error) {
-            console.error('Error toggling item:', error);
-            alert('Failed to update checklist. Please try again.');
+            console.error(t('Error toggling item:'), error);
+            alert(t('Failed to update checklist. Please try again.'));
             // Reload to get correct state on error
             await loadChecklists();
         }
@@ -158,8 +160,8 @@ export default function ChecklistsPage() {
         try {
             await updateChecklist(checklistId, updatedItems, user.$id, user.name);
         } catch (error) {
-            console.error('Error adding item:', error);
-            alert('Failed to add item. Please try again.');
+            console.error(t('Error adding item:'), error);
+            alert(t('Failed to add item. Please try again.'));
             // Reload to get correct state on error
             await loadChecklists();
         }
@@ -185,8 +187,8 @@ export default function ChecklistsPage() {
         try {
             await updateChecklist(checklistId, updatedItems, user.$id, user.name);
         } catch (error) {
-            console.error('Error deleting item:', error);
-            alert('Failed to delete item. Please try again.');
+            console.error(t('Error deleting item:'), error);
+            alert(t('Failed to delete item. Please try again.'));
             // Reload to get correct state on error
             await loadChecklists();
         }
@@ -196,7 +198,9 @@ export default function ChecklistsPage() {
         if (!user) return;
 
         // Confirm before clearing
-        if (!confirm('Clear all completed items? This will uncheck all items but keep them in the list.')) {
+        if (!confirm(t(
+            'Clear all completed items? This will uncheck all items but keep them in the list.'
+        ))) {
             return;
         }
 
@@ -220,8 +224,8 @@ export default function ChecklistsPage() {
         try {
             await updateChecklist(checklistId, clearedItems, user.$id, user.name);
         } catch (error) {
-            console.error('Error clearing checklist:', error);
-            alert('Failed to clear checklist. Please try again.');
+            console.error(t('Error clearing checklist:'), error);
+            alert(t('Failed to clear checklist. Please try again.'));
             // Reload to get correct state on error
             await loadChecklists();
         }
@@ -251,9 +255,9 @@ export default function ChecklistsPage() {
 
     if (loading || loadingData) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-                <div className="text-lg text-gray-900 dark:text-gray-100">Loading...</div>
-            </div>
+            (<div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+                <div className="text-lg text-gray-900 dark:text-gray-100">{t('Loading...')}</div>
+            </div>)
         );
     }
 
@@ -264,45 +268,44 @@ export default function ChecklistsPage() {
     // Check if user has access to checklists
     if (!userRole || (userRole !== 'admin' && userRole !== 'driver' && userRole !== 'engineer' && userRole !== 'technician')) {
         return (
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+            (<div className="min-h-screen bg-gray-50 dark:bg-gray-950">
                 <Navigation />
                 <main className="lg:pl-64 pb-20 lg:pb-8">
                     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         <div className="text-center py-12">
                             <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-                                Access Restricted
+                                {t('Access Restricted')}
                             </h2>
                             <p className="text-gray-600 dark:text-gray-400">
-                                You don't have permission to view checklists for this event.
+                                {t('You don\'t have permission to view checklists for this event.')}
                             </p>
                         </div>
                     </div>
                 </main>
-            </div>
+            </div>)
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+        (<div className="min-h-screen bg-gray-50 dark:bg-gray-950">
             <Navigation />
-
             <main className="lg:pl-64 pb-20 lg:pb-8">
                 <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     {/* Header */}
                     <div className="mb-8">
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                            {userRole === 'admin' ? 'Event Checklists' : `${userRole?.charAt(0).toUpperCase()}${userRole?.slice(1)} Checklist`}
+                            {userRole === 'admin' ? t('Event Checklists') : `${userRole?.charAt(0).toUpperCase()}${userRole?.slice(1)} ${t('Checklist')}`}
                         </h1>
                         <p className="text-gray-600 dark:text-gray-400">
                             {currentEvent.name}
                         </p>
                         {userRole === 'admin' ? (
                             <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
-                                As an admin, you can view and manage all three role checklists
+                                {t('As an admin, you can view and manage all three role checklists')}
                             </p>
                         ) : (
                             <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
-                                Manage your personal checklist • Updates save automatically
+                                {t('Manage your personal checklist • Updates save automatically')}
                             </p>
                         )}
                     </div>
@@ -311,7 +314,7 @@ export default function ChecklistsPage() {
                     {checklists.length === 0 ? (
                         <div className="text-center py-12">
                             <p className="text-gray-600 dark:text-gray-400">
-                                No checklists available
+                                {t('No checklists available')}
                             </p>
                         </div>
                     ) : (
@@ -333,7 +336,7 @@ export default function ChecklistsPage() {
                     )}
                 </div>
             </main>
-        </div>
+        </div>)
     );
 }
 
@@ -375,7 +378,7 @@ function ChecklistCard({
     };
 
     return (
-        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden">
+        (<div className="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden">
             {/* Header */}
             <div className={`bg-gradient-to-r ${getRoleColor(checklist.role)} p-4`}>
                 <div className="flex items-center justify-between mb-2">
@@ -393,9 +396,9 @@ function ChecklistCard({
                             <button
                                 onClick={() => onClearChecklist(checklist.$id, items)}
                                 className="text-white/90 hover:text-white hover:bg-white/20 rounded-lg px-2 py-1 text-xs font-medium transition-colors"
-                                title="Clear all checkmarks for next match"
+                                title={t('Clear all checkmarks for next match')}
                             >
-                                Clear
+                                {t('Clear')}
                             </button>
                         )}
                     </div>
@@ -409,7 +412,6 @@ function ChecklistCard({
                     />
                 </div>
             </div>
-
             {/* Items */}
             <div className="p-4 space-y-2 max-h-96 overflow-y-auto">
                 {items.map(item => (
@@ -441,8 +443,8 @@ function ChecklistCard({
                         <button
                             onClick={() => onDeleteItem(checklist.$id, item.id, items)}
                             className="flex-shrink-0 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors lg:opacity-0 lg:group-hover:opacity-100 lg:transition-opacity"
-                            title="Delete item"
-                            aria-label="Delete item"
+                            title={t('Delete item')}
+                            aria-label={t('Delete item')}
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -451,7 +453,6 @@ function ChecklistCard({
                     </div>
                 ))}
             </div>
-
             {/* Add Item Form */}
             <div className="p-4 border-t border-gray-200 dark:border-gray-800">
                 {showAddForm ? (
@@ -460,7 +461,7 @@ function ChecklistCard({
                             type="text"
                             value={newItemText}
                             onChange={e => setNewItemText(e.target.value)}
-                            placeholder="Enter new checklist item..."
+                            placeholder={t('Enter new checklist item...')}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                             autoFocus
                         />
@@ -470,7 +471,7 @@ function ChecklistCard({
                                 disabled={!newItemText.trim()}
                                 className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
                             >
-                                Add
+                                {t('Add')}
                             </button>
                             <button
                                 type="button"
@@ -480,7 +481,7 @@ function ChecklistCard({
                                 }}
                                 className="px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 text-sm font-medium"
                             >
-                                Cancel
+                                {t('Cancel')}
                             </button>
                         </div>
                     </form>
@@ -489,17 +490,16 @@ function ChecklistCard({
                         onClick={() => setShowAddForm(true)}
                         className="w-full px-3 py-2 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-300 transition-colors text-sm font-medium"
                     >
-                        + Add Item
+                        {t('+ Add Item')}
                     </button>
                 )}
             </div>
-
             {/* Footer */}
             {checklist.lastEditedByName && (
                 <div className="px-4 pb-3 text-xs text-gray-500 dark:text-gray-500">
-                    Last edited by {checklist.lastEditedByName}
+                    {t('Last edited by')} {checklist.lastEditedByName}
                 </div>
             )}
-        </div>
+        </div>)
     );
 }

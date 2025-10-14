@@ -1,5 +1,7 @@
 'use client';
 
+import { createT } from '@/lib/simple-i18n';
+const t = createT('pits/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -38,7 +40,7 @@ export default function PitsPage() {
       const data = await getPitScouts(currentEvent.$id);
       setPits(data);
     } catch (error) {
-      console.error('Error loading pit scouts:', error);
+      console.error(t('Error loading pit scouts:'), error);
     } finally {
       setLoadingData(false);
     }
@@ -55,16 +57,15 @@ export default function PitsPage() {
 
   if (loading || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
-      </div>
+      (<div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">{t('Loading...')}</div>
+      </div>)
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    (<div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navigation />
-
       {/* Main Content */}
       <main className="lg:pl-64 pb-20 lg:pb-8">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -78,7 +79,7 @@ export default function PitsPage() {
               <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Dashboard
+              {t('Dashboard')}
             </button>
 
             {/* Mobile Header Bar */}
@@ -94,7 +95,7 @@ export default function PitsPage() {
                 </button>
                 <div className="ml-3 flex-1">
                   <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    Pit Scouts
+                    {t('Pit Scouts')}
                   </h1>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
                     {pits.length} {pits.length === 1 ? 'record' : 'records'}
@@ -111,7 +112,7 @@ export default function PitsPage() {
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                    Pit Scouts
+                    {t('Pit Scouts')}
                   </h1>
                   <p className="text-gray-600 dark:text-gray-400">
                     {pits.length} {pits.length === 1 ? 'record' : 'records'} from {currentEvent?.name}
@@ -132,7 +133,7 @@ export default function PitsPage() {
               </svg>
               <input
                 type="text"
-                placeholder="Search by team, name, or drivetrain..."
+                placeholder={t('Search by team, name, or drivetrain...')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -144,7 +145,7 @@ export default function PitsPage() {
           {loadingData ? (
             <div className="text-center py-12">
               <div className="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-              <p className="mt-4 text-gray-600 dark:text-gray-400">Loading pit scouts...</p>
+              <p className="mt-4 text-gray-600 dark:text-gray-400">{t('Loading pit scouts...')}</p>
             </div>
           ) : filteredPits.length === 0 ? (
             <div className="text-center py-12 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
@@ -152,10 +153,10 @@ export default function PitsPage() {
                 <span className="text-4xl">🔧</span>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                {searchQuery ? 'No pit scouts found' : 'No pit scouts yet'}
+                {searchQuery ? t('No pit scouts found') : t('No pit scouts yet')}
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                {searchQuery ? 'Try a different search term' : 'Click the + button to add your first pit scout'}
+                {searchQuery ? t('Try a different search term') : t('Click the + button to add your first pit scout')}
               </p>
             </div>
           ) : (
@@ -171,7 +172,7 @@ export default function PitsPage() {
                       <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-amber-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
                         {pit.pitNumber ? (
                           <div className="text-center">
-                            <div className="text-xs opacity-75">Pit</div>
+                            <div className="text-xs opacity-75">{t('Pit')}</div>
                             <div className="text-lg leading-none">{pit.pitNumber}</div>
                           </div>
                         ) : (
@@ -180,7 +181,7 @@ export default function PitsPage() {
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                          Team {pit.teamNumber}
+                          {t('Team')} {pit.teamNumber}
                         </h3>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                           {pit.teamName}
@@ -195,7 +196,7 @@ export default function PitsPage() {
                         <span className="text-lg">⚙️</span>
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Drivetrain</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{t('Drivetrain')}</p>
                         <p className="text-sm font-medium text-gray-900 dark:text-white">{pit.drivetrainType}</p>
                       </div>
                     </div>
@@ -205,7 +206,7 @@ export default function PitsPage() {
                         <span className="text-lg">💻</span>
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Programming</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{t('Programming')}</p>
                         <p className="text-sm font-medium text-gray-900 dark:text-white">{pit.programmingLanguage}</p>
                       </div>
                     </div>
@@ -215,7 +216,7 @@ export default function PitsPage() {
                         <span className="text-lg">⚖️</span>
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Weight</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{t('Weight')}</p>
                         <p className="text-sm font-medium text-gray-900 dark:text-white">{pit.robotWeight} lbs</p>
                       </div>
                     </div>
@@ -225,13 +226,13 @@ export default function PitsPage() {
                     <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800 space-y-2">
                       {pit.strengths && (
                         <div>
-                          <p className="text-xs font-medium text-green-600 dark:text-green-400 mb-1">💪 Strengths</p>
+                          <p className="text-xs font-medium text-green-600 dark:text-green-400 mb-1">{t('💪 Strengths')}</p>
                           <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">{pit.strengths}</p>
                         </div>
                       )}
                       {pit.weaknesses && (
                         <div>
-                          <p className="text-xs font-medium text-orange-600 dark:text-orange-400 mb-1">⚠️ Weaknesses</p>
+                          <p className="text-xs font-medium text-orange-600 dark:text-orange-400 mb-1">{t('⚠️ Weaknesses')}</p>
                           <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">{pit.weaknesses}</p>
                         </div>
                       )}
@@ -244,7 +245,7 @@ export default function PitsPage() {
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         {pit.lastEditedByName ? (
                           <>
-                            <span className="font-medium">Last edited by:</span> {pit.lastEditedByName}
+                            <span className="font-medium">{t('Last edited by:')}</span> {pit.lastEditedByName}
                             {pit.lastEditedAt && (
                               <span className="ml-2">
                                 {new Date(pit.lastEditedAt).toLocaleString()}
@@ -253,7 +254,7 @@ export default function PitsPage() {
                           </>
                         ) : (
                           <>
-                            <span className="font-medium">Created by:</span> {pit.createdByName}
+                            <span className="font-medium">{t('Created by:')}</span> {pit.createdByName}
                           </>
                         )}
                       </p>
@@ -265,7 +266,6 @@ export default function PitsPage() {
           )}
         </div>
       </main>
-
       {/* Floating Add Button - Only show if user can edit */}
       {currentEvent && canEditData(currentEvent, user.$id) && (
         <button
@@ -277,6 +277,6 @@ export default function PitsPage() {
           </svg>
         </button>
       )}
-    </div>
+    </div>)
   );
 }

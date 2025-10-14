@@ -1,5 +1,7 @@
 'use client';
 
+import { createT } from '@/lib/simple-i18n';
+const t = createT('analytics/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -140,7 +142,7 @@ export default function AnalyticsPage() {
       calculateTeamStats(matches, pits);
       calculateAllianceStats(matches);
     } catch (error) {
-      console.error('Error loading analytics:', error);
+      console.error(t('Error loading analytics:'), error);
     } finally {
       setLoadingData(false);
     }
@@ -248,18 +250,17 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    (<div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navigation />
-
       <main className="lg:pl-64 pb-20 lg:pb-8">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              📊 Analytics Dashboard
+              {t('📊 Analytics Dashboard')}
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Data insights for {currentEvent.name}
+              {t('Data insights for')} {currentEvent.name}
             </p>
           </div>
 
@@ -272,7 +273,7 @@ export default function AnalyticsPage() {
                 : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
             >
-              📈 Overview
+              {t('📈 Overview')}
             </button>
             <button
               onClick={() => setSelectedView('teams')}
@@ -281,7 +282,7 @@ export default function AnalyticsPage() {
                 : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
             >
-              🏆 Team Rankings
+              {t('🏆 Team Rankings')}
             </button>
             <button
               onClick={() => setSelectedView('detailed')}
@@ -290,7 +291,7 @@ export default function AnalyticsPage() {
                 : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
             >
-              📊 Detailed Stats
+              {t('📊 Detailed Stats')}
             </button>
             <button
               onClick={() => setSelectedView('matches')}
@@ -299,14 +300,14 @@ export default function AnalyticsPage() {
                 : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
             >
-              🏁 Match Analysis
+              {t('🏁 Match Analysis')}
             </button>
           </div>
 
           {loadingData ? (
             <div className="text-center py-16">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-              <p className="mt-4 text-gray-600 dark:text-gray-400">Loading analytics...</p>
+              <p className="mt-4 text-gray-600 dark:text-gray-400">{t('Loading analytics...')}</p>
             </div>
           ) : (
             <>
@@ -321,7 +322,7 @@ export default function AnalyticsPage() {
                           🏁
                         </div>
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Total Matches</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{t('Total Matches')}</p>
                           <p className="text-2xl font-bold text-gray-900 dark:text-white">{matchScouts.length > 0 ? matchScouts.length : '-'}</p>
                         </div>
                       </div>
@@ -333,7 +334,7 @@ export default function AnalyticsPage() {
                           🔧
                         </div>
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Teams Scouted</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{t('Teams Scouted')}</p>
                           <p className="text-2xl font-bold text-gray-900 dark:text-white">{teamStats.length > 0 ? teamStats.length : '-'}</p>
                         </div>
                       </div>
@@ -345,7 +346,7 @@ export default function AnalyticsPage() {
                           📊
                         </div>
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Pit Scouts</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{t('Pit Scouts')}</p>
                           <p className="text-2xl font-bold text-gray-900 dark:text-white">{pitScouts.length > 0 ? pitScouts.length : '-'}</p>
                         </div>
                       </div>
@@ -357,7 +358,7 @@ export default function AnalyticsPage() {
                           ⭐
                         </div>
                         <div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Avg Score</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{t('Avg Score')}</p>
                           <p className="text-2xl font-bold text-gray-900 dark:text-white">
                             {teamStats.length > 0
                               ? Math.round(teamStats.reduce((sum, t) => sum + t.avgTotalScore, 0) / teamStats.length)
@@ -370,25 +371,25 @@ export default function AnalyticsPage() {
 
                   {/* Alliance Comparison */}
                   <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Alliance Performance</h2>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t('Alliance Performance')}</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* Red Alliance */}
                       <div className="bg-red-50 dark:bg-red-900/10 rounded-xl p-6 border-2 border-red-200 dark:border-red-800">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-10 h-10 bg-red-500 rounded-lg"></div>
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-white">Red Alliance</h3>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white">{t('Red Alliance')}</h3>
                         </div>
                         <div className="space-y-3">
                           <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">Matches:</span>
+                            <span className="text-gray-600 dark:text-gray-400">{t('Matches:')}</span>
                             <span className="font-semibold text-gray-900 dark:text-white">{allianceStats.red.matches > 0 ? allianceStats.red.matches : '-'}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">Avg Score:</span>
+                            <span className="text-gray-600 dark:text-gray-400">{t('Avg Score:')}</span>
                             <span className="font-semibold text-gray-900 dark:text-white">{allianceStats.red.avgScore > 0 ? allianceStats.red.avgScore : '-'}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">Highest Score:</span>
+                            <span className="text-gray-600 dark:text-gray-400">{t('Highest Score:')}</span>
                             <span className="font-semibold text-gray-900 dark:text-white">{allianceStats.red.highestScore > 0 ? allianceStats.red.highestScore : '-'}</span>
                           </div>
                         </div>
@@ -398,19 +399,19 @@ export default function AnalyticsPage() {
                       <div className="bg-blue-50 dark:bg-blue-900/10 rounded-xl p-6 border-2 border-blue-200 dark:border-blue-800">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-10 h-10 bg-blue-500 rounded-lg"></div>
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-white">Blue Alliance</h3>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white">{t('Blue Alliance')}</h3>
                         </div>
                         <div className="space-y-3">
                           <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">Matches:</span>
+                            <span className="text-gray-600 dark:text-gray-400">{t('Matches:')}</span>
                             <span className="font-semibold text-gray-900 dark:text-white">{allianceStats.blue.matches > 0 ? allianceStats.blue.matches : '-'}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">Avg Score:</span>
+                            <span className="text-gray-600 dark:text-gray-400">{t('Avg Score:')}</span>
                             <span className="font-semibold text-gray-900 dark:text-white">{allianceStats.blue.avgScore > 0 ? allianceStats.blue.avgScore : '-'}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">Highest Score:</span>
+                            <span className="text-gray-600 dark:text-gray-400">{t('Highest Score:')}</span>
                             <span className="font-semibold text-gray-900 dark:text-white">{allianceStats.blue.highestScore > 0 ? allianceStats.blue.highestScore : '-'}</span>
                           </div>
                         </div>
@@ -420,7 +421,7 @@ export default function AnalyticsPage() {
 
                   {/* Top Performers */}
                   <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">🏆 Top 5 Teams</h2>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t('🏆 Top 5 Teams')}</h2>
                     <div className="space-y-3">
                       {teamStats.slice(0, 5).map((team, index) => (
                         <div key={team.teamNumber} className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
@@ -433,7 +434,7 @@ export default function AnalyticsPage() {
                           </div>
                           <div className="flex-1">
                             <p className="font-bold text-gray-900 dark:text-white">
-                              Team {team.teamNumber}
+                              {t('Team')} {team.teamNumber}
                               {team.teamName && <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">({team.teamName})</span>}
                             </p>
                             <p className="text-sm text-gray-600 dark:text-gray-400">{team.matchCount} matches</p>
@@ -445,7 +446,7 @@ export default function AnalyticsPage() {
                         </div>
                       ))}
                       {teamStats.length === 0 && (
-                        <p className="text-center py-8 text-gray-500 dark:text-gray-400">No team data available yet</p>
+                        <p className="text-center py-8 text-gray-500 dark:text-gray-400">{t('No team data available yet')}</p>
                       )}
                     </div>
                   </div>
@@ -459,15 +460,15 @@ export default function AnalyticsPage() {
                     <table className="w-full">
                       <thead className="bg-gradient-to-r from-blue-600 to-amber-500 text-white">
                         <tr>
-                          <th className="px-6 py-4 text-left text-sm font-semibold">Rank</th>
-                          <th className="px-6 py-4 text-left text-sm font-semibold">Team</th>
-                          <th className="px-6 py-4 text-center text-sm font-semibold">Matches</th>
-                          <th className="px-6 py-4 text-center text-sm font-semibold">Avg Total</th>
-                          <th className="px-6 py-4 text-center text-sm font-semibold">Avg Auto</th>
-                          <th className="px-6 py-4 text-center text-sm font-semibold">Avg Teleop</th>
-                          <th className="px-6 py-4 text-center text-sm font-semibold">Highest</th>
-                          <th className="px-6 py-4 text-center text-sm font-semibold">Robot Leave %</th>
-                          <th className="px-6 py-4 text-center text-sm font-semibold">Endgame</th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold">{t('Rank')}</th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold">{t('Team')}</th>
+                          <th className="px-6 py-4 text-center text-sm font-semibold">{t('Matches')}</th>
+                          <th className="px-6 py-4 text-center text-sm font-semibold">{t('Avg Total')}</th>
+                          <th className="px-6 py-4 text-center text-sm font-semibold">{t('Avg Auto')}</th>
+                          <th className="px-6 py-4 text-center text-sm font-semibold">{t('Avg Teleop')}</th>
+                          <th className="px-6 py-4 text-center text-sm font-semibold">{t('Highest')}</th>
+                          <th className="px-6 py-4 text-center text-sm font-semibold">{t('Robot Leave %')}</th>
+                          <th className="px-6 py-4 text-center text-sm font-semibold">{t('Endgame')}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -484,7 +485,7 @@ export default function AnalyticsPage() {
                             </td>
                             <td className="px-6 py-4">
                               <div>
-                                <p className="font-bold text-gray-900 dark:text-white">Team {team.teamNumber}</p>
+                                <p className="font-bold text-gray-900 dark:text-white">{t('Team')} {team.teamNumber}</p>
                                 {team.teamName && <p className="text-sm text-gray-600 dark:text-gray-400">{team.teamName}</p>}
                               </div>
                             </td>
@@ -506,17 +507,17 @@ export default function AnalyticsPage() {
                               <div className="flex items-center justify-center gap-2 text-xs">
                                 {(team.endgamePositions?.full ?? 0) > 0 && (
                                   <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full font-semibold">
-                                    Full: {team.endgamePositions.full}
+                                    {t('Full:')} {team.endgamePositions.full}
                                   </span>
                                 )}
                                 {(team.endgamePositions?.partial ?? 0) > 0 && (
                                   <span className="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-full font-semibold">
-                                    Partial: {team.endgamePositions.partial}
+                                    {t('Partial:')} {team.endgamePositions.partial}
                                   </span>
                                 )}
                                 {(team.endgamePositions?.none ?? 0) > 0 && (
                                   <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full font-semibold">
-                                    None: {team.endgamePositions.none}
+                                    {t('None:')} {team.endgamePositions.none}
                                   </span>
                                 )}
                               </div>
@@ -526,7 +527,7 @@ export default function AnalyticsPage() {
                         {teamStats.length === 0 && (
                           <tr>
                             <td colSpan={9} className="px-6 py-16 text-center text-gray-500 dark:text-gray-400">
-                              No team data available yet
+                              {t('No team data available yet')}
                             </td>
                           </tr>
                         )}
@@ -541,7 +542,7 @@ export default function AnalyticsPage() {
                 <div className="space-y-4">
                   {/* Team Selector */}
                   <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md">
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">Select a Team</h2>
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">{t('Select a Team')}</h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                       {teamStats.map((team) => (
                         <button
@@ -567,13 +568,13 @@ export default function AnalyticsPage() {
                     const pitNumber = pitInfo?.pitNumber || '?';
 
                     return (
-                      <div className="space-y-4">
+                      (<div className="space-y-4">
                         {/* Team Header */}
                         <div className="bg-gradient-to-br from-blue-50 via-amber-50 to-blue-50 dark:from-blue-950/30 dark:via-amber-950/30 dark:to-blue-950/30 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
                           <div className="flex items-center gap-4">
                             <div className="flex-1">
                               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                                Team {team.teamNumber}
+                                {t('Team')} {team.teamNumber}
                               </h2>
                               {team.teamName && (
                                 <p className="text-sm text-gray-600 dark:text-gray-400">{team.teamName}</p>
@@ -583,30 +584,29 @@ export default function AnalyticsPage() {
                               </p>
                             </div>
                             <div className="text-right">
-                              <p className="text-xs text-gray-600 dark:text-gray-400">Average Score</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400">{t('Average Score')}</p>
                               <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{team.avgTotalScore}</p>
                             </div>
                           </div>
                         </div>
-
                         {/* Score Statistics - Compact Table */}
                         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md">
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">📊 Score Statistics</h3>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">{t('📊 Score Statistics')}</h3>
                           <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                               <thead className="bg-gray-100 dark:bg-gray-700">
                                 <tr>
-                                  <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 dark:text-gray-300">Metric</th>
-                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">Mean</th>
-                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">Median</th>
-                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">Mode</th>
-                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">Max</th>
-                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">Min</th>
+                                  <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Metric')}</th>
+                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Mean')}</th>
+                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Median')}</th>
+                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Mode')}</th>
+                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Max')}</th>
+                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Min')}</th>
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">🏆 Total Score</td>
+                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">{t('🏆 Total Score')}</td>
                                   <td className="px-3 py-2 text-center text-blue-600 dark:text-blue-400 font-bold">{team.totalScore.mean}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.totalScore.median}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.totalScore.mode}</td>
@@ -614,7 +614,7 @@ export default function AnalyticsPage() {
                                   <td className="px-3 py-2 text-center text-red-600 dark:text-red-400 font-semibold">{team.totalScore.min}</td>
                                 </tr>
                                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">🚀 Auto Score</td>
+                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">{t('🚀 Auto Score')}</td>
                                   <td className="px-3 py-2 text-center text-purple-600 dark:text-purple-400 font-bold">{team.autoScore.mean}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.autoScore.median}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.autoScore.mode}</td>
@@ -622,7 +622,7 @@ export default function AnalyticsPage() {
                                   <td className="px-3 py-2 text-center text-red-600 dark:text-red-400 font-semibold">{team.autoScore.min}</td>
                                 </tr>
                                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">🎮 Teleop Score</td>
+                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">{t('🎮 Teleop Score')}</td>
                                   <td className="px-3 py-2 text-center text-green-600 dark:text-green-400 font-bold">{team.teleopScore.mean}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.teleopScore.median}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.teleopScore.mode}</td>
@@ -630,7 +630,7 @@ export default function AnalyticsPage() {
                                   <td className="px-3 py-2 text-center text-red-600 dark:text-red-400 font-semibold">{team.teleopScore.min}</td>
                                 </tr>
                                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">🏁 Endgame Score</td>
+                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">{t('🏁 Endgame Score')}</td>
                                   <td className="px-3 py-2 text-center text-indigo-600 dark:text-indigo-400 font-bold">{team.endgameScore.mean}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.endgameScore.median}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.endgameScore.mode}</td>
@@ -641,25 +641,24 @@ export default function AnalyticsPage() {
                             </table>
                           </div>
                         </div>
-
                         {/* Artifact Statistics - Compact Table */}
                         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md">
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">📦 Artifact Statistics</h3>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">{t('📦 Artifact Statistics')}</h3>
                           <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                               <thead className="bg-gray-100 dark:bg-gray-700">
                                 <tr>
-                                  <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 dark:text-gray-300">Metric</th>
-                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">Mean</th>
-                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">Median</th>
-                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">Mode</th>
-                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">Max</th>
-                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">Min</th>
+                                  <th className="px-3 py-2 text-left text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Metric')}</th>
+                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Mean')}</th>
+                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Median')}</th>
+                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Mode')}</th>
+                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Max')}</th>
+                                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 dark:text-gray-300">{t('Min')}</th>
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">📦 Depot Artifacts</td>
+                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">{t('📦 Depot Artifacts')}</td>
                                   <td className="px-3 py-2 text-center text-amber-600 dark:text-amber-400 font-bold">{team.depotArtifacts.mean}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.depotArtifacts.median}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.depotArtifacts.mode}</td>
@@ -667,7 +666,7 @@ export default function AnalyticsPage() {
                                   <td className="px-3 py-2 text-center text-red-600 dark:text-red-400 font-semibold">{team.depotArtifacts.min}</td>
                                 </tr>
                                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">⚙️ Classified Artifacts</td>
+                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">{t('⚙️ Classified Artifacts')}</td>
                                   <td className="px-3 py-2 text-center text-pink-600 dark:text-pink-400 font-bold">{team.classifiedArtifacts.mean}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.classifiedArtifacts.median}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.classifiedArtifacts.mode}</td>
@@ -675,7 +674,7 @@ export default function AnalyticsPage() {
                                   <td className="px-3 py-2 text-center text-red-600 dark:text-red-400 font-semibold">{team.classifiedArtifacts.min}</td>
                                 </tr>
                                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">🔷 Overflow (Auto)</td>
+                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">{t('🔷 Overflow (Auto)')}</td>
                                   <td className="px-3 py-2 text-center text-cyan-600 dark:text-cyan-400 font-bold">{team.overflowArtifactsAuto.mean}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.overflowArtifactsAuto.median}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.overflowArtifactsAuto.mode}</td>
@@ -683,7 +682,7 @@ export default function AnalyticsPage() {
                                   <td className="px-3 py-2 text-center text-red-600 dark:text-red-400 font-semibold">{team.overflowArtifactsAuto.min}</td>
                                 </tr>
                                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">🔶 Overflow (Teleop)</td>
+                                  <td className="px-3 py-2 font-medium text-gray-900 dark:text-white">{t('🔶 Overflow (Teleop)')}</td>
                                   <td className="px-3 py-2 text-center text-teal-600 dark:text-teal-400 font-bold">{team.overflowArtifactsTeleop.mean}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.overflowArtifactsTeleop.median}</td>
                                   <td className="px-3 py-2 text-center text-gray-900 dark:text-white font-semibold">{team.overflowArtifactsTeleop.mode}</td>
@@ -694,15 +693,14 @@ export default function AnalyticsPage() {
                             </table>
                           </div>
                         </div>
-
                         {/* Endgame Distribution - Compact */}
                         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md">
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">🏁 Endgame Distribution</h3>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">{t('🏁 Endgame Distribution')}</h3>
                           <div className="grid grid-cols-3 gap-3">
                             <div className="text-center p-3 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200 dark:border-green-800">
                               <div className="text-2xl mb-1">✅</div>
                               <p className="text-xl font-bold text-green-600 dark:text-green-400">{team.endgamePositions.full}</p>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Full</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('Full')}</p>
                               <p className="text-xs text-gray-500 dark:text-gray-500">
                                 {Math.round((team.endgamePositions.full / team.matchCount) * 100)}%
                               </p>
@@ -710,7 +708,7 @@ export default function AnalyticsPage() {
                             <div className="text-center p-3 bg-amber-50 dark:bg-amber-900/10 rounded-lg border border-amber-200 dark:border-amber-800">
                               <div className="text-2xl mb-1">⚠️</div>
                               <p className="text-xl font-bold text-amber-600 dark:text-amber-400">{team.endgamePositions.partial}</p>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Partial</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('Partial')}</p>
                               <p className="text-xs text-gray-500 dark:text-gray-500">
                                 {Math.round((team.endgamePositions.partial / team.matchCount) * 100)}%
                               </p>
@@ -718,22 +716,24 @@ export default function AnalyticsPage() {
                             <div className="text-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
                               <div className="text-2xl mb-1">❌</div>
                               <p className="text-xl font-bold text-gray-600 dark:text-gray-400">{team.endgamePositions.none}</p>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">None</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('None')}</p>
                               <p className="text-xs text-gray-500 dark:text-gray-500">
                                 {Math.round((team.endgamePositions.none / team.matchCount) * 100)}%
                               </p>
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div>)
                     );
                   })()}
 
                   {!selectedTeam && teamStats.length > 0 && (
                     <div className="bg-white dark:bg-gray-800 rounded-xl p-12 shadow-md text-center">
                       <div className="text-6xl mb-4">📊</div>
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Select a Team</h3>
-                      <p className="text-gray-600 dark:text-gray-400">Choose a team from above to view detailed statistics and performance graphs</p>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('Select a Team')}</h3>
+                      <p className="text-gray-600 dark:text-gray-400">{t(
+                        'Choose a team from above to view detailed statistics and performance graphs'
+                      )}</p>
                     </div>
                   )}
                 </div>
@@ -743,7 +743,7 @@ export default function AnalyticsPage() {
               {selectedView === 'matches' && (
                 <div className="space-y-6">
                   <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Recent Matches</h2>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{t('Recent Matches')}</h2>
                     <div className="space-y-3">
                       {matchScouts.slice(0, 10).map((match) => (
                         <div key={match.$id} className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
@@ -753,7 +753,7 @@ export default function AnalyticsPage() {
                           </div>
                           <div className="flex-1">
                             <p className="font-bold text-gray-900 dark:text-white">
-                              Team {match.teamNumber}
+                              {t('Team')} {match.teamNumber}
                               <span className={`ml-3 text-sm px-2 py-1 rounded ${match.alliance === 'red'
                                 ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
                                 : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
@@ -761,9 +761,7 @@ export default function AnalyticsPage() {
                                 {match.alliance.toUpperCase()}
                               </span>
                             </p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              Auto: {match.autoScore} | Teleop: {match.teleopScore}
-                            </p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{t('Auto')}: {match.autoScore} | {t('Teleop')}: {match.teleopScore}</p>
                           </div>
                           <div className="text-right">
                             <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{match.totalScore}</p>
@@ -772,7 +770,7 @@ export default function AnalyticsPage() {
                         </div>
                       ))}
                       {matchScouts.length === 0 && (
-                        <p className="text-center py-8 text-gray-500 dark:text-gray-400">No match data available yet</p>
+                        <p className="text-center py-8 text-gray-500 dark:text-gray-400">{t('No match data available yet')}</p>
                       )}
                     </div>
                   </div>
@@ -782,6 +780,6 @@ export default function AnalyticsPage() {
           )}
         </div>
       </main>
-    </div>
+    </div>)
   );
 }

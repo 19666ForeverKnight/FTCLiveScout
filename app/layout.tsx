@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FTC Live Scout",
-  description: "Live scouting app for FTC competitions",
+  title: 'FTC Live Scout',
+  description: 'Live scouting app for FTC competitions',
 };
 
 export default function RootLayout({
