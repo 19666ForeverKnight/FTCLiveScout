@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function checkUserSilently() {
     if (initialCheckDone) return;
-    
+
     try {
       const currentUser = await getCurrentUser();
       setUser(currentUser);

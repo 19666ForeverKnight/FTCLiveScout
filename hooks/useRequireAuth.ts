@@ -9,16 +9,16 @@ import { useRouter } from 'next/navigation';
  * Automatically checks auth status and redirects to login if not authenticated
  */
 export function useRequireAuth() {
-  const { user, loading, initialCheckDone } = useAuth();
-  const router = useRouter();
+    const { user, loading, initialCheckDone } = useAuth();
+    const router = useRouter();
 
-  useEffect(() => {
-    // Wait for initial auth check, then redirect if not authenticated
-    if (initialCheckDone && !user && !loading) {
-      router.push('/login');
-    }
-  }, [user, loading, initialCheckDone, router]);
+    useEffect(() => {
+        // Wait for initial auth check, then redirect if not authenticated
+        if (initialCheckDone && !user && !loading) {
+            router.push('/login');
+        }
+    }, [user, loading, initialCheckDone, router]);
 
-  // Return loading as true if initial check is not done yet
-  return { user, loading: loading || !initialCheckDone };
+    // Return loading as true if initial check is not done yet
+    return { user, loading: loading || !initialCheckDone };
 }
