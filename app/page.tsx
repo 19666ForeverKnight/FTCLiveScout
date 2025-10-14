@@ -179,14 +179,16 @@ export default function Home() {
           </div>
           <div className="max-w-4xl mx-auto">
             <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-2 shadow-2xl">
-              <Image
-                src="/ftc_decode_1240x860.png"
-                alt={t('FTC DECODE Season 2024-2025')}
-                width={1240}
-                height={860}
-                className="w-full h-auto rounded-2xl shadow-xl"
-                loading="lazy"
-              />
+              <div className="relative w-full" style={{ aspectRatio: '1240/860' }}>
+                <Image
+                  src="/ftc_decode_1240x860.png"
+                  alt={t('FTC DECODE Season 2024-2025')}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  className="rounded-2xl shadow-xl object-cover"
+                  loading="lazy"
+                />
+              </div>
             </div>
           </div>
         </div>

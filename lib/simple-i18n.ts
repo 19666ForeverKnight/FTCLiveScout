@@ -64,8 +64,6 @@ export function getLocaleName(locale: SupportedLocale): string {
 export function t(moduleName: string, text: string): string {
     const locale = getCurrentLocale();
 
-    console.log('[i18n] Translation request:', { moduleName, text, locale });
-
     // For English, return the original text
     if (locale === 'en') {
         return text;
@@ -74,18 +72,15 @@ export function t(moduleName: string, text: string): string {
     // Get the module resources
     const moduleResources = localeResources[locale]?.[moduleName];
     if (!moduleResources) {
-        console.log('[i18n] No resources found for module:', moduleName);
         return text;
     }
 
     // Get the translation
     const translation = moduleResources[text];
     if (translation === null || translation === undefined) {
-        console.log('[i18n] No translation found for:', text);
         return text;
     }
 
-    console.log('[i18n] Translation found:', translation);
     return translation;
 }
 

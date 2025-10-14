@@ -4,6 +4,7 @@ import { createT } from '@/lib/simple-i18n';
 const t = createT('events/page')
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { useEvent } from '@/context/EventContext';
 import { CreateEventModal } from '@/components/CreateEventModal';
@@ -95,11 +96,16 @@ export default function EventsPage() {
             <div className="flex items-center">
               <div className="relative group">
                 <div className="absolute bg-gradient-to-r from-blue-600 to-amber-500 rounded-lg blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
-                <img
-                  src="/logo.png"
-                  alt={t('FTC Live Scout')}
-                  className="relative h-12 w-auto sm:h-15 rounded-lg shadow-lg group-hover:scale-105 transition-transform duration-300"
-                />
+                <div className="relative h-12 w-12 sm:h-15 sm:w-15">
+                  <Image
+                    src="/logo.png"
+                    alt={t('FTC Live Scout')}
+                    width={60}
+                    height={60}
+                    className="rounded-lg shadow-lg group-hover:scale-105 transition-transform duration-300"
+                    priority
+                  />
+                </div>
               </div>
             </div>
 
