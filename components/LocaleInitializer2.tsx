@@ -10,11 +10,10 @@ export default function LocaleInitializer({ children }: { children?: React.React
     const [isLocaleLoaded, setIsLocaleLoaded] = useState(false);
 
     useEffect(() => {
-        // Initialize locale before first render
-        initializeLocale().then((loadedLocale) => {
-            console.log('LocaleInitializer: Locale initialized to:', loadedLocale);
-            setIsLocaleLoaded(true);
-        });
+        // Initialize locale before first render (synchronous)
+        const loadedLocale = initializeLocale();
+        console.log('LocaleInitializer: Locale initialized to:', loadedLocale);
+        setIsLocaleLoaded(true);
     }, []);
 
     // Don't render children until locale is loaded
