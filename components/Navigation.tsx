@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useEvent } from '@/context/EventContext';
 import { useAuth } from '@/context/AuthContext';
@@ -28,7 +29,7 @@ export function Navigation() {
           {/* Logo */}
           <div className="flex items-center justify-center flex-shrink-0 px-6 py-5 border-b border-gray-200 dark:border-gray-800">
             <Link href="/events" className="flex items-center">
-              <img src="/logo.png" alt="FTC Live Scout" className="w-20 h-20 rounded-xl hover:scale-105 transition-transform duration-200 shadow-lg" />
+              <Image src="/logo.png" alt="FTC Live Scout" width={80} height={80} className="rounded-xl hover:scale-105 transition-transform duration-200 shadow-lg" priority />
             </Link>
           </div>
 

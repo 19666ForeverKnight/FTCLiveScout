@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -37,7 +38,7 @@ export default function LoginPage() {
         {/* Logo/Icon */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center mb-4">
-            <img src="/logo.png" alt={t('FTC Live Scout')} className="w-20 h-20 rounded-3xl shadow-xl" />
+            <Image src="/logo.png" alt={t('FTC Live Scout')} width={80} height={80} className="rounded-3xl shadow-xl" priority />
           </div>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-amber-600 dark:from-blue-400 dark:to-amber-400 bg-clip-text text-transparent mb-2">
             {t('Welcome Back')}

@@ -3,6 +3,7 @@
 import { createT } from '@/lib/simple-i18n';
 const t = createT('app/page')
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -36,7 +37,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <img src="/logo.png" alt={t('FTC Live Scout')} className="w-12 h-12 rounded-xl shadow-lg" />
+                <Image src="/logo.png" alt={t('FTC Live Scout')} width={48} height={48} className="rounded-xl shadow-lg" priority />
                 <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-amber-600 dark:from-blue-400 dark:to-amber-400 bg-clip-text text-transparent">
                   {t('FTC Live Scout')}
                 </span>
@@ -178,10 +179,13 @@ export default function Home() {
           </div>
           <div className="max-w-4xl mx-auto">
             <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-2 shadow-2xl">
-              <img
+              <Image
                 src="/ftc_decode_1240x860.png"
                 alt={t('FTC DECODE Season 2024-2025')}
+                width={1240}
+                height={860}
                 className="w-full h-auto rounded-2xl shadow-xl"
+                loading="lazy"
               />
             </div>
           </div>
@@ -235,7 +239,7 @@ export default function Home() {
               <div className="bg-gradient-to-br from-blue-500 to-amber-500 rounded-3xl p-1 shadow-2xl">
                 <div className="bg-white dark:bg-gray-800 rounded-3xl p-8">
                   <div className="aspect-square flex items-center justify-center">
-                    <img src="/logo.png" alt={t('FTC Live Scout')} className="w-64 h-64 rounded-3xl shadow-2xl" />
+                    <Image src="/logo.png" alt={t('FTC Live Scout')} width={256} height={256} className="rounded-3xl shadow-2xl" loading="lazy" />
                   </div>
                 </div>
               </div>
@@ -268,7 +272,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center gap-6">
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt={t('FTC Live Scout')} className="w-10 h-10 rounded-lg" />
+              <Image src="/logo.png" alt={t('FTC Live Scout')} width={40} height={40} className="rounded-lg" loading="lazy" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">{t('FTC Live Scout')}</span>
             </div>
             <div className="flex gap-6 text-sm text-gray-600 dark:text-gray-400">
@@ -280,7 +284,7 @@ export default function Home() {
             {/* Team 19666 Credit */}
             <div className="flex flex-col items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-800 w-full max-w-md">
               <div className="flex items-center gap-3">
-                <img src={t('/FTC 19666 Logo.svg')} alt={t('FTC Team 19666')} className="w-12 h-12" />
+                <Image src={t('/FTC 19666 Logo.svg')} alt={t('FTC Team 19666')} width={48} height={48} loading="lazy" />
                 <div className="text-center">
                   <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                     {t('Created by FTC Team 19666')}
