@@ -130,8 +130,14 @@ function PitScoutForm() {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
+    // Calculate total images after adding new ones
+    const totalImages = existingImageIds.length + imageFiles.length + files.length;
+    if (totalImages > 35) {
+      setError(t('You can upload up to 35 images only.'));
+      return;
+    }
+
     const newFiles: File[] = [];
-    const newPreviews: string[] = [];
     let hasError = false;
 
     Array.from(files).forEach(file => {
@@ -704,7 +710,7 @@ function PitScoutForm() {
                                 e.stopPropagation();
                                 handleRemoveImage(index);
                               }}
-                              className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition-colors opacity-0 group-hover:opacity-100 z-10"
+                              className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition-colors md:opacity-0 md:group-hover:opacity-100 opacity-100 z-10 shadow-lg"
                               title={t('Remove image')}
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -717,7 +723,7 @@ function PitScoutForm() {
                     )}
 
                     {/* Upload Area */}
-                    <div className="flex items-center justify-center w-full">
+                    <div className="flex flex-col items-center justify-center w-full">
                       <label htmlFor="robot-images" className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 dark:border-gray-700 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <div className="flex flex-col items-center justify-center py-4">
                           <svg className="w-8 h-8 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -729,13 +735,20 @@ function PitScoutForm() {
                           <p className="text-xs text-gray-500 dark:text-gray-400">
                             {t('Multiple images supported • PNG, JPG, WEBP (MAX. 5MB each)')}
                           </p>
+                          <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">
+                            {t('Images:')} {existingImageIds.length + imageFiles.length} / 35
+                          </p>
+                          {error && (
+                            <p className="text-xs text-red-600 dark:text-red-400 mt-1">{error}</p>
+                          )}
                         </div>
                         <input
                           id="robot-images"
                           type="file"
                           className="hidden"
-                          accept="image/jpeg,image/jpg,image/png,image/webp"
+                          accept="image/*"
                           multiple
+                          capture="environment"
                           onChange={handleImageChange}
                         />
                       </label>
