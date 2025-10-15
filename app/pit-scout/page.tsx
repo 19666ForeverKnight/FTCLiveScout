@@ -563,7 +563,7 @@ function PitScoutForm() {
 
                     <div className="group">
                       <label htmlFor="robotWeight" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        {t('Weight (lbs)')}
+                        {t('Weight (kg)')}
                       </label>
                       <input
                         type="text"
