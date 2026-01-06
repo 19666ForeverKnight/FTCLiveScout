@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { EventProvider } from "@/context/EventContext";
@@ -39,7 +38,6 @@ export default function RootLayout({
             {children}
           </EventProvider>
         </AuthProvider>
-        <SpeedInsights />
       </body>
     </html>
   );
